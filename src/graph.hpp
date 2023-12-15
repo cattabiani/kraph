@@ -24,6 +24,23 @@ namespace K {
                 .first->second;
         }
 
+        K::Edge* newEdge(const string& label, const string& info,
+                               const string& fromId, const string& toId) {
+            
+            auto fromIt = nodes_.find(fromId);
+            if (fromIt == nodes_.end()) {
+                return nullptr;
+            }
+            auto toIt = nodes_.find(toId);
+            if (toIt == nodes_.end()) {
+                return nullptr;
+            }
+            auto id = uuid_factory_.generateNewUuid();
+            auto e = edges_.emplace(piecewise_construct, make_tuple(id), make_tuple(id, label, info, fromId, toId));
+            return &e;
+        }
+
+
         bool moveNode(const string& id, const int x, const int y) {
             auto it = nodes_.find(id);
             if (it == nodes_.end()) {
@@ -57,6 +74,8 @@ namespace K {
             }
             return nullptr;
         }
+
+
 
         static Graph& getInstance() {
             static Graph gg{};
