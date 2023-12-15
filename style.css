@@ -1,0 +1,87 @@
+.modal {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    /* More appropriate width */
+    height: auto;
+    /* Height based on content */
+    background-color: #f8f8ff;
+    /* Light pastel blue background */
+    z-index: 1000;
+    padding: 40px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    /* Soft shadow for depth */
+    border-radius: 8px;
+    /* Rounded corners */
+    box-sizing: border-box;
+}
+
+.modal .input-container {
+    margin-bottom: 20px;
+}
+
+.modal label {
+    display: block;
+    /* Make label a block element to sit above the input */
+    margin-bottom: 5px;
+    /* Space between label and input */
+    font-size: 16px;
+    color: #5f5f7b;
+    /* Pastel dark lavender */
+}
+
+.modal input,
+.modal textarea {
+    width: 100%;
+    /* Full width of the container */
+    padding: 12px;
+    border: 1px solid #a7bed3;
+    /* Pastel blue border */
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    background-color: #e7eff6;
+    /* Very light pastel blue background */
+    box-sizing: border-box;
+}
+
+.modal textarea {
+    resize: vertical;
+    /* Allow vertical resizing only */
+    height: 100px;
+    /* Initial height */
+}
+
+.node {
+    font-size: 16px;
+    /* Increased font size */
+    font-weight: bold;
+    /* Make the text bolder */
+    border: 1px solid #a7bed3;
+    /* Softer border color */
+    padding: 10px;
+    /* Slightly more padding for better visual spacing */
+    background-color: #2e83a4;
+    /* A toned-down shade to match the modal */
+    color: white;
+    /* White text for better contrast and readability */
+    position: absolute;
+    border-radius: 8px;
+    /* Rounded corners for a modern look */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Subtle shadow for depth */
+    text-align: center;
+    /* Center text alignment */
+    cursor: pointer;
+    /* Change cursor to indicate interactivity */
+    transition: transform 0.2s;
+    /* Smooth transition for interactions */
+}
+
+.node:hover {
+    transform: scale(1.05);
+    /* Slightly enlarge on hover for visual feedback */
+}
