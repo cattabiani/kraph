@@ -55,6 +55,23 @@
     /* Initial height */
 }
 
+.selection-box {
+    position: fixed;
+    border: 2px dashed #a7bed3;
+    /* Pastel blue border to match modal */
+    background-color: rgba(142, 169, 204, 0.2);
+    /* Semi-transparent pastel blue background */
+    pointer-events: none;
+    display: block;
+    /* Initially hidden, shown during selection */
+    z-index: 999;
+    /* High z-index to ensure it's on top */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    /* Soft shadow for depth */
+    border-radius: 8px;
+    /* Rounded corners */
+}
+
 .node {
     font-size: 16px;
     /* Increased font size */
@@ -84,4 +101,17 @@
 .node:hover {
     transform: scale(1.05);
     /* Slightly enlarge on hover for visual feedback */
+}
+
+.node-selected {
+    background-color: #3a6f8f;
+    /* Slightly darker background color */
+    border: 2px solid #ffcc00;
+    /* Brighter border for high visibility */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Enhanced shadow for depth */
+    transform: scale(1.1);
+    /* Slightly larger scale for emphasis */
+    transition: transform 0.2s, box-shadow 0.2s, border 0.2s, background-color 0.2s;
+    /* Smooth transition for all changes */
 }

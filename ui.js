@@ -1,5 +1,8 @@
 let activeNode = null;
 let modalObjId = null;
+let selectionBox = null;
+let selectedNodes = [];
+let startX, startY;
 
 function createInputContainer(labelName, type, value) {
     let inputId = labelName + '-' + type;
@@ -80,6 +83,17 @@ function updateNode(n) {
     div.style.top = n.getY() + 'px';
 }
 
+function highlightSelection() {
+    selectedNodes.forEach(node => {
+        node.classList.add('node-selected');
+    });
+}
+
+function unhighlightSelection() {
+    selectedNodes.forEach(node => {
+        node.classList.remove('node-selected');
+    });
+}
 
 
 
@@ -100,11 +114,16 @@ function dragging(e) {
     }
 }
 
+function isEmptySpace(event) {
+    return !event.target.matches('.node') && !document.getElementById('modal').contains(event.target);
+}
+
 document.addEventListener('dblclick', async function (event) {
-    if (!event.target.matches('.modal, .node')) {
+    if (isEmptySpace(event)) {
         let n = await graphNewNode(event.clientX, event.clientY);
         updateNode(n);
         n.delete();
+        isSelecting = false;
     } else if (event.target.matches('.node')) {
         await openNodeModal(event.target.id);
     }
@@ -127,5 +146,72 @@ document.addEventListener('mousedown', async function (event) {
 document.addEventListener('keydown', async function (event) {
     if (event.key === 'Escape' && !document.getElementById('modal').contains(event.target) && modalObjId) {
         await closeNodeModal();
+    }
+});
+
+document.addEventListener('mousedown', function (e) {
+    if (!isEmptySpace(e)) return;
+
+    unhighlightSelection();
+    selectedNodes = [];
+    startX = e.pageX;
+    startY = e.pageY;
+
+    selectionBox = document.createElement('div');
+    selectionBox.className = 'selection-box';
+    document.body.appendChild(selectionBox);
+
+    selectionBox.style.left = `${startX}px`;
+    selectionBox.style.top = `${startY}px`;
+});
+
+document.addEventListener('mousemove', function (e) {
+    if (!selectionBox) return;
+
+    const x = Math.min(e.pageX, startX);
+    const y = Math.min(e.pageY, startY);
+    const w = Math.abs(e.pageX - startX);
+    const h = Math.abs(e.pageY - startY);
+
+    selectionBox.style.left = `${x}px`;
+    selectionBox.style.top = `${y}px`;
+    selectionBox.style.width = `${w}px`;
+    selectionBox.style.height = `${h}px`;
+});
+
+document.addEventListener('mouseup', function (e) {
+    if (!selectionBox) return;
+
+    // Calculate which nodes are selected
+    const rect = selectionBox.getBoundingClientRect();
+    selectedNodes = Array.from(document.getElementsByClassName('node'))
+        .filter(node => {
+            const nodeRect = node.getBoundingClientRect();
+            return rect.left < nodeRect.right && rect.right > nodeRect.left &&
+                rect.top < nodeRect.bottom && rect.bottom > nodeRect.top;
+        });
+
+    highlightSelection();
+
+    selectionBox.remove();
+    selectionBox = null;
+    isSelecting = false;
+});
+
+document.addEventListener('keydown', function (e) {
+    if (e.key === "Delete") { // Check if 'Delete' key was pressed
+        // Delete all selected nodes
+        selectedNodes.forEach(node => {
+            graphRemoveNode(node.id);
+            node.remove();
+        });
+        selectedNodes = []; // Clear the array after deletion
+    }
+});
+
+document.addEventListener('keydown', async function (event) {
+    if (event.key === 'Escape') {
+        unhighlightSelection();
+        selectedNodes = []; // Clear the array after deletion
     }
 });

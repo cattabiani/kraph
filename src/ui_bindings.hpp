@@ -35,6 +35,7 @@ public:
                                                                 const int y) {
     auto& gg = K::Graph::getInstance();
     const auto& ans = gg.newNode("New Node", "", x, y);
+
     return new JsNode(ans);
 }
 
@@ -63,7 +64,17 @@ graphGetNode(const client::String& id) {
 graphMoveNode(const client::String& id, const int x, const int y) {
     auto& gg = K::Graph::getInstance();
     auto ans = gg.moveNode(string(id), x, y);
-    if (ans) {
+    if (!ans) {
+        client::console.log(
+            client::String().concat("node ", id, " not found!"));
+    }
+}
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] void
+graphRemoveNode(const client::String& id) {
+    auto& gg = K::Graph::getInstance();
+    auto ans = gg.removeNode(string(id));
+    if (!ans) {
         client::console.log(
             client::String().concat("node ", id, " not found!"));
     }
