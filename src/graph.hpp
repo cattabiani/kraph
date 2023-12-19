@@ -12,9 +12,6 @@ using namespace std;
 namespace K {
     class Graph {
     public:
-        Graph(const Graph&) = delete;
-        Graph& operator=(const Graph&) = delete;
-
         const K::Node& newNode(const string& label, const string& info,
                                const int x, const int y) {
             auto id = uuid_factory_.generateNewUuid();
@@ -132,11 +129,6 @@ namespace K {
             return nullptr;
         }
 
-        static Graph& getInstance() {
-            static Graph gg{};
-            return gg;
-        }
-
         size_t nodesSize() const { return nodes_.size(); }
 
         size_t edgesSize() const { return edges_.size(); }
@@ -149,9 +141,6 @@ namespace K {
             clearNodes();
             clearEdges();
         }
-
-    private:
-        Graph() {}
 
     private:
         unordered_map<string, Node> nodes_;

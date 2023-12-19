@@ -1,3 +1,3 @@
-#include "ui_bindings.hpp"
+#include "controller.hpp"
 
 void webMain() {}
