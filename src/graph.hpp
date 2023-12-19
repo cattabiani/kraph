@@ -36,6 +36,8 @@ namespace K {
                 return nullptr;
             }
             auto id = uuid_factory_.generateNewUuid();
+            fromIt->second.edges_.insert(id);
+            toIt->second.edges_.insert(id);
             return &(edges_
                          .emplace(piecewise_construct, make_tuple(id),
                                   make_tuple(id, label, info, fromId, toId))
@@ -94,6 +96,14 @@ namespace K {
             return nullptr;
         }
 
+        const K::Edge* getEdge(const string& id) {
+            auto it = edges_.find(id);
+            if (it != edges_.end()) {
+                return &(it->second);
+            }
+            return nullptr;
+        }
+
         const K::Node* updateNode(const string& id, const string& label,
                                   const string& info) {
             auto it = nodes_.find(id);
@@ -108,9 +118,36 @@ namespace K {
             return nullptr;
         }
 
+        const K::Edge* updateEdge(const string& id, const string& label,
+                                  const string& info) {
+            auto it = edges_.find(id);
+            if (it != edges_.end()) {
+                auto& e = it->second;
+
+                e.label_ = label;
+                e.info_ = info;
+
+                return &(e);
+            }
+            return nullptr;
+        }
+
         static Graph& getInstance() {
             static Graph gg{};
             return gg;
+        }
+
+        size_t nodesSize() const { return nodes_.size(); }
+
+        size_t edgesSize() const { return edges_.size(); }
+
+        void clearNodes() { nodes_.clear(); }
+
+        void clearEdges() { edges_.clear(); }
+
+        void clear() {
+            clearNodes();
+            clearEdges();
         }
 
     private:
