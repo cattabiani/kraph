@@ -12,3 +12,5 @@ add_executable(app.js ${SOURCES})
 
 install(TARGETS app.js DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/..)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/app.wasm DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/..)
+
+#cmake . -B build && cmake --build build && cmake --install build && python3 -m http.server
