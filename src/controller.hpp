@@ -11,24 +11,109 @@
 
 using namespace std;
 
-class [[cheerp::jsexport]] Bau {
-    public:
-    [[cheerp::jsexport]] Bau(const int x, const int y) : x_(x), y_(y), z_("AAA") {}
+class [[cheerp::jsexport]] NewNodeEvent {
+public:
+    [[cheerp::jsexport]] NewNodeEvent(const int x, const int y)
+        : x_(x), y_(y) {}
+
+    void apply(K::Graph& gg) { 
+        auto node = gg.newNode("New Node", "", x_, y_); 
+        id_ = node.id_;
+    }
+
+    void undo(K::Graph& gg) {
+        gg.removeNode(id_);
+    }
+
+    constexpr static const char* eventType_ = "newNodeEvent";
     int x_;
     int y_;
-    std::string z_;
+    string id_;
 };
 
-[[cheerp::jsexport]] [[cheerp::genericjs]]
-void dispatchNewNodeEvent(int x, int y) {
-    auto a = new Bau(x, y);
-    auto eventInit = new client::CustomEventInit<Bau>();
-    eventInit->set_detail(a);
+
+namespace K {
+    
+
+    class Controller {
+    using VarType = std::variant<NewNodeEvent>;
+    public:
+    
+        Controller(const Controller&) = delete;
+        Controller& operator=(const Controller&) = delete;
+
+        static Controller& getInstance() {
+            static Controller cc{};
+            return cc;
+        }
+
+        vector<VarType>& get_history() { return h_; }
+
+        VarType* advance() {
+            if (idx_ >= h_.size()) {
+                return nullptr;
+            }
+            std::visit([this](auto&& arg) { 
+                arg.apply(gg_);
+            }, h_[idx_++]);
+
+            return &h_[idx_-1];
+        }
+
+    private:
+        Controller() {}
+
+    private:
+        Graph gg_;
+        vector<VarType> h_;
+        size_t idx_ = 0;
+    };
+}
+
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] 
+void dispatchNewNodeEvent(const int x, const int y) {
+    auto& cc = K::Controller::getInstance();
+    auto& h = cc.get_history();
+    h.emplace_back(NewNodeEvent(x, y));
+
+    auto p = cc.advance();
+    if (!p) {
+        client::console.log("advance failed!");
+        return;
+    }
+    client::console.log(client::String().concat("advance success! ", h.size()));
+    auto eventInit = new client::CustomEventInit<NewNodeEvent>();
+
+    eventInit->set_detail(&std::get<NewNodeEvent>(*p));
 
     auto event =
-        new client::CustomEvent<Bau>("newNodeEvent", eventInit);
+        new client::CustomEvent<NewNodeEvent>(NewNodeEvent::eventType_, eventInit);
     client::document.dispatchEvent(event);
+
 }
+
+
+
+
+// class [[cheerp::jsexport]] Bau {
+//     public:
+//     [[cheerp::jsexport]] Bau(const int x, const int y) : x_(x), y_(y), z_("AAA") {}
+//     int x_;
+//     int y_;
+//     std::string z_;
+// };
+
+// [[cheerp::jsexport]] [[cheerp::genericjs]]
+// void dispatchNewNodeEvent(int x, int y) {
+//     auto a = new Bau(x, y);
+//     auto eventInit = new client::CustomEventInit<Bau>();
+//     eventInit->set_detail(a);
+
+//     auto event =
+//         new client::CustomEvent<Bau>("newNodeEvent", eventInit);
+//     client::document.dispatchEvent(event);
+// }
 
 
 // class [[cheerp::jsexport]] NewNodeEvent {
@@ -114,20 +199,4 @@ void dispatchNewNodeEvent(int x, int y) {
 //     client::document.dispatchEvent(event);
 // }
 
-// [[cheerp::jsexport]] void
-// dispatchNewNodeEvent(const int x, const int y) {
-//     auto& cc = K::Controller::getInstance();
-//     auto& h = cc.get_history();
-//     h.emplace_back(NewNodeEvent(x, y));
-//     cc.advance();
-
-//     bau(&std::get<NewNodeEvent>(h.back()));
-
-//     // auto eventInit = new client::CustomEventInit<NewNodeEvent>();
-//     // eventInit->set_detail(&std::get<NewNodeEvent>(h.back()));
-
-//     // auto event =
-//     //     new client::CustomEvent<NewNodeEvent>("newNodeEvent", eventInit);
-//     // client::document.dispatchEvent(event);
-// }
 
