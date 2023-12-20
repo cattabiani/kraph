@@ -1,3 +1,6 @@
-#include "controller.hpp"
+
+#include "jsexport.hpp"
+
+using namespace std;
 
 void webMain() {}
