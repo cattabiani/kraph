@@ -32,18 +32,18 @@ namespace K {
                     .first->second;
     }
 
-    shared_ptr<K::Node> Graph::remove_node(const string& id) {
+    shared_ptr<K::Node> Graph::erase_node(const string& id) {
         auto nh = nodes_.extract(id);
         if (!nh.empty()) {
             for (const auto& eid : nh.mapped().edges_) {
-                remove_edge(eid);
+                erase_edge(eid);
             }
         }
 
         return make_shared<K::Node>(nh.mapped());
     }
 
-    shared_ptr<K::Edge> Graph::remove_edge(const string& id) {
+    shared_ptr<K::Edge> Graph::erase_edge(const string& id) {
         auto nh = edges_.extract(id);
         if (nh.empty()) {
             return nullptr;

@@ -2,14 +2,13 @@
 
 #include <optional>
 #include <sstream>
+#include <memory>
 #include <unordered_map>
 
-#include <cheerp/client.h>
-#include <cheerp/clientlib.h>
 
 #include "edge.hpp"
 #include "node.hpp"
-#include "util.hpp"
+#include "utils.hpp"
 #include "uuid.hpp"
 
 using namespace std;
@@ -17,16 +16,13 @@ using namespace std;
 namespace K {
     class Graph {
     public:
-        Graph(const Graph&) = delete;
-        Graph& operator=(const Graph&) = delete;
-
         K::Node* new_node(const int x, const int y);
 
         K::Edge* new_edge(const string& label, const string& info,
                           const string& fromId, const string& toId);
 
-        shared_ptr<K::Node> remove_node(const string& id);
-        shared_ptr<K::Edge> remove_edge(const string& id);
+        shared_ptr<K::Node> erase_node(const string& id);
+        shared_ptr<K::Edge> erase_edge(const string& id);
 
         size_t nodes_size() const { return nodes_.size(); }
 
@@ -41,10 +37,6 @@ namespace K {
             clear_edges();
         }
 
-        static Graph& getInstance() {
-            static Graph gg{};
-            return gg;
-        }
 
         friend std::ostream& operator<<(std::ostream& os, const Graph& obj) {
             os << "Graph\n    Nodes: " << obj.nodes_
@@ -52,8 +44,6 @@ namespace K {
             return os;
         }
 
-    private:
-        Graph() {}
 
     private:
         unordered_map<string, Node> nodes_;
@@ -68,11 +58,11 @@ namespace K {
 // }
 
 // std::unordered_map<string, Node>::node_type
-// removeNode(const string& id) {
+// eraseNode(const string& id) {
 //     auto nh = nodes_.extract(id);
 //     if (!nh.empty()) {
 //         for (const auto& eid : nh.mapped().edges_) {
-//             removeEdge(eid);
+//             eraseEdge(eid);
 //         }
 //     }
 
