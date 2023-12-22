@@ -9,26 +9,44 @@
 
 using namespace std;
 
+
+
 [[cheerp::jsexport]] [[cheerp::genericjs]] void printGraph();
 
-[[cheerp::jsexport]] void newNode(const int x, const int y);
+[[cheerp::jsexport]] [[cheerp::genericjs]] void newNode(const int x, const int y);
 
-class [[cheerp::jsexport]] UpdateNodeEvent {
-public:
-    UpdateNodeEvent(const string& id, const string& label, const int x, const int y) : id_(id), label_(label), x_(x), y_(y) {}
+[[cheerp::genericjs]] void emitUpdateNode(const string& id, const string& label, const int x, const int y);
 
-    [[cheerp::jsexport]] [[cheerp::genericjs]] client::String* getId() { return new client::String(id_.c_str()); }
-    [[cheerp::jsexport]] [[cheerp::genericjs]] client::String* getLabel() { return new client::String(label_.c_str()); }
-    [[cheerp::jsexport]] [[cheerp::genericjs]] int getX() { return x_; }
-    [[cheerp::jsexport]] [[cheerp::genericjs]] int getY() { return y_; }
+[[cheerp::jsexport]] [[cheerp::genericjs]] void registerUpdateNode(client::EventListener* cb);
 
-    string id_;
-    string label_;
-    int x_;
-    int y_;
-};
 
-[[cheerp::jsexport]] [[cheerp::genericjs]] void emitUpdateNodeEvent(UpdateNodeEvent* p);
+// class [[cheerp::jsexport]] [[cheerp::genericjs]] CallbackManager {
+//     public:
+        
+//         [[cheerp::jsexport]] [[cheerp::genericjs]] void registerUpdateNode(client::EventListener* cb);
+//         [[cheerp::genericjs]] void emitUpdateNode(const string& id, const string& label, const int x, const int y);
+
+//         client::EventListener* updateNodeCb_;
+// };
+
+// [[cheerp::genericjs]] CallbackManager* getCallbackManager();
+
+// class [[cheerp::jsexport]] UpdateNodeEvent {
+// public:
+//     UpdateNodeEvent(const string& id, const string& label, const int x, const int y) : id_(id), label_(label), x_(x), y_(y) {}
+
+//     [[cheerp::jsexport]] [[cheerp::genericjs]] client::String* getId() { return new client::String(id_.c_str()); }
+//     [[cheerp::jsexport]] [[cheerp::genericjs]] client::String* getLabel() { return new client::String(label_.c_str()); }
+//     [[cheerp::jsexport]] [[cheerp::genericjs]] int getX() { return x_; }
+//     [[cheerp::jsexport]] [[cheerp::genericjs]] int getY() { return y_; }
+//     [[cheerp::jsexport]] [[cheerp::genericjs]] void emit();
+
+//     string id_;
+//     string label_;
+//     int x_;
+//     int y_;
+// };
+
 
 // [[cheerp::jsexport]] [[cheerp::genericjs]] void
 // dispatchNewNodeEvent(const int x, const int y) {

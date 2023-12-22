@@ -14,8 +14,7 @@ namespace K {
         auto n = gg.new_node(x_, y_);
         if (n) {
             id_ = n->id_;
-            auto p = new UpdateNodeEvent(id_, n->label_, x_, y_);
-            emitUpdateNodeEvent(p);
+            emitUpdateNode(id_, n->label_, x_, y_);
         }
     }
 
