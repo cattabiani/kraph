@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     // This code will be executed when the document is fully loaded
     
     // Call the async function after the document is loaded
-    callbackManager.promise.then(function () {
-        callbackManager.registerUpdateNode(updateNode);
+    registerUpdateNode.promise.then(function () {
+        registerUpdateNode(updateNode);
       });
 
     // You can perform other tasks here as well

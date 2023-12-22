@@ -15,8 +15,8 @@ using namespace std;
 
 [[cheerp::jsexport]] [[cheerp::genericjs]] void newNode(const int x, const int y);
 
-[[cheerp::genericjs]] void emitUpdateNode(const string& id, const string& label, const int x, const int y);
 
+[[cheerp::genericjs]] void emitUpdateNode(const string& id, const string& label, const int x, const int y);
 [[cheerp::jsexport]] [[cheerp::genericjs]] void registerUpdateNode(client::EventListener* cb);
 
 

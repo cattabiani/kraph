@@ -1,9 +1,10 @@
 #include "events.hpp"
 #include "graph.hpp"
 
-// #ifdef TESTS
+
+#ifndef TESTS
 #include "jsexports.hpp"
-// #endif
+#endif
 
 #include <iostream>
 
@@ -14,7 +15,9 @@ namespace K {
         auto n = gg.new_node(x_, y_);
         if (n) {
             id_ = n->id_;
+            #ifndef TESTS
             emitUpdateNode(id_, n->label_, x_, y_);
+            #endif
         }
     }
 
