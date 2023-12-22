@@ -14,7 +14,7 @@ void fill_chronology(size_t b, size_t e) {
     }
 }
 
-TEST(chronology_test, general_time_travel) {
+TEST(chronologyTest, generalTimeTravel) {
     auto& cc = K::Chronology::get_instance();
 
     fill_chronology(0, 5);
@@ -63,8 +63,8 @@ TEST(chronology_test, general_time_travel) {
     EXPECT_EQ(distance(cc.get_pos(), cc.get_events().end()), 0); 
     EXPECT_EQ(cc.get_events().size(), 3); 
 
-    EXPECT_EQ(static_pointer_cast<K::NewNodeEvent>(*prev(cc.get_pos()))->x_, 6); 
-    EXPECT_EQ(static_pointer_cast<K::NewNodeEvent>(*prev(cc.get_pos(), 2))->x_, 1); 
+    EXPECT_EQ(static_pointer_cast<K::NewNodeEvent>(*prev(cc.get_pos()))->n_.x_, 6); 
+    EXPECT_EQ(static_pointer_cast<K::NewNodeEvent>(*prev(cc.get_pos(), 2))->n_.x_, 1); 
 }
 
 int main(int argc, char **argv) {

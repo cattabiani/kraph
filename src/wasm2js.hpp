@@ -1,23 +1,32 @@
 #pragma once
 
-#include <sstream>
-
 #include <cheerp/client.h>
 #include <cheerp/clientlib.h>
 
-#include "chronology.hpp"
-
 using namespace std;
 
+[[cheerp::jsexport]] [[cheerp::genericjs]] void printGraphW();
+[[cheerp::jsexport]] [[cheerp::genericjs]] void printChronologyW();
+[[cheerp::jsexport]] [[cheerp::genericjs]] void redoW();
+[[cheerp::jsexport]] [[cheerp::genericjs]] void undoW();
+
+// [[cheerp::jsexport]] [[cheerp::genericjs]] void newNodeBridge(const int x, const int y);
+// [[cheerp::genericjs]] void emitUpdateNodeBridge(const string& id, const string& label, const int x, const int y);
+// [[cheerp::jsexport]] [[cheerp::genericjs]] void registerUpdateNodeBridge(client::EventListener* cb);
+
+// [[cheerp::jsexport]] [[cheerp::genericjs]] void eraseNodeBridge(const client::String& id);
+// [[cheerp::genericjs]] void emitEraseNodeBridge(const string& id);
+// [[cheerp::jsexport]] [[cheerp::genericjs]] void registerEraseNodeBridge(client::EventListener* cb);
 
 
-[[cheerp::jsexport]] [[cheerp::genericjs]] void printGraph();
 
-[[cheerp::jsexport]] [[cheerp::genericjs]] void newNode(const int x, const int y);
-
-
-[[cheerp::genericjs]] void emitUpdateNode(const string& id, const string& label, const int x, const int y);
-[[cheerp::jsexport]] [[cheerp::genericjs]] void registerUpdateNode(client::EventListener* cb);
+// namespace [[cheerp::genericjs]] client
+// {
+//     void bau();
+// }
+//     void updateNode(const String& id, const String& label, const int x, const int y);
+//     void eraseNode(const String& id);
+// }
 
 
 // class [[cheerp::jsexport]] [[cheerp::genericjs]] CallbackManager {

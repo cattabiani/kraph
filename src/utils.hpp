@@ -34,7 +34,7 @@ std::ostream& operator<<(std::ostream& os, const Iterable& container) {
          /* no increment here */) {
         os << *it;
         if (++it != container.end()) {
-            os.write(", ", 2);
+            os << '\n';
         }
     }
     os.put(']');

@@ -4,12 +4,14 @@
 
 namespace K {
 
-    K::Node* Graph::new_node(const int x, const int y) {
-        auto id = uuid_factory_.generate();
-        return &nodes_
-                    .emplace(piecewise_construct, make_tuple(id),
-                             make_tuple(id, "New Node", "", x, y))
-                    .first->second;
+    bool Graph::new_node(K::Node& n) {
+        if (n.id_.empty()) {
+            n.id_ = uuid_factory_.generate();
+            n.label_ = "New Node";
+            n.info_ = "";
+        }
+        nodes_[n.id_] = n;
+        return true;
     }
 
     K::Edge* Graph::new_edge(const string& label, const string& info,
@@ -32,15 +34,16 @@ namespace K {
                     .first->second;
     }
 
-    shared_ptr<K::Node> Graph::erase_node(const string& id) {
-        auto nh = nodes_.extract(id);
+    bool Graph::erase_node(K::Node& n) {
+        auto nh = nodes_.extract(n.id_);
         if (!nh.empty()) {
             for (const auto& eid : nh.mapped().edges_) {
                 erase_edge(eid);
             }
+            n = nh.mapped();
+            return true;
         }
-
-        return make_shared<K::Node>(nh.mapped());
+        return false;
     }
 
     shared_ptr<K::Edge> Graph::erase_edge(const string& id) {

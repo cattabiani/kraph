@@ -19,20 +19,20 @@ namespace K {
     public:
         static Chronology& get_instance();
 
-        void add_event(shared_ptr<Event> e);
+        void add_event(shared_ptr<K::Event> e);
 
         void redo();
         void undo();
         
         const K::Graph& get_graph() const { return gg_; }
-        const std::list<std::shared_ptr<Event>>& get_events() const { return events_; }
-        std::list<std::shared_ptr<Event>>::const_iterator get_pos() const { return pos_; }
+        const std::list<std::shared_ptr<K::Event>>& get_events() const { return events_; }
+        std::list<std::shared_ptr<K::Event>>::const_iterator get_pos() const { return pos_; }
 
     private:
 
         K::Graph gg_;
-        std::list<std::shared_ptr<Event>> events_;
-        std::list<std::shared_ptr<Event>>::iterator pos_ = events_.end();
+        std::list<std::shared_ptr<K::Event>> events_;
+        std::list<std::shared_ptr<K::Event>>::iterator pos_ = events_.end();
     
     public:
 
@@ -43,7 +43,7 @@ namespace K {
                 /* no increment here */) {
                 os << *(*it);
                 if (++it != container.end()) {
-                    os.write(", ", 2);
+                    os << '\n';
                 }
             }
 

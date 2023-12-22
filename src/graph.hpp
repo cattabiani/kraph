@@ -16,12 +16,12 @@ using namespace std;
 namespace K {
     class Graph {
     public:
-        K::Node* new_node(const int x, const int y);
+        bool new_node(K::Node& n);
 
         K::Edge* new_edge(const string& label, const string& info,
                           const string& fromId, const string& toId);
 
-        shared_ptr<K::Node> erase_node(const string& id);
+        bool erase_node(K::Node& n);
         shared_ptr<K::Edge> erase_edge(const string& id);
 
         size_t nodes_size() const { return nodes_.size(); }
@@ -39,8 +39,8 @@ namespace K {
 
 
         friend std::ostream& operator<<(std::ostream& os, const Graph& obj) {
-            os << "Graph\n    Nodes: " << obj.nodes_
-               << "\n    Edges: " << obj.edges_;
+            os << "Graph\nNodes:\n" << obj.nodes_
+               << "\nEdges:\n" << obj.edges_;
             return os;
         }
 
