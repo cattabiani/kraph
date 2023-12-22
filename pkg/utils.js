@@ -18,11 +18,11 @@ function isModalModeOn() {
 }
 
 function isInSelection(node) {
-    selection.forEach(elem => {
+    for (const elem of selection) {
         if (elem.id === node.id) {
             return true;
         }
-    });
+    }
     return false;
 }
 

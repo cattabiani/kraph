@@ -22,6 +22,10 @@ namespace K {
                           const string& fromId, const string& toId);
 
         bool erase_node(K::Node& n);
+
+        K::Node* move_node(const string& id, int& x, int& y);
+        K::Node* update_data_node(const string& id, string& label, string& info);
+
         shared_ptr<K::Edge> erase_edge(const string& id);
 
         size_t nodes_size() const { return nodes_.size(); }

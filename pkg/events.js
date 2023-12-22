@@ -57,6 +57,28 @@ function eraseSelection() {
     cancelSelection();
 }
 
+function moveSelection(dx, dy) {
+    debugLog("move selection event");
+    selection.forEach(elem => {
+        if (isNode(elem)) {
+            elem.style.left = (parseInt(elem.style.left, 10) + dx) + 'px';
+            elem.style.top = (parseInt(elem.style.top, 10) + dy) + 'px';
+        }
+    });
+    startX += dx;
+    startY += dy;
+}
+
+function moveSelectionW() {
+    debugLog("move selection event w");
+    selection.forEach(elem => {
+        if (isNode(elem)) {
+            moveNodeW(elem.id, parseInt(elem.style.left, 10), parseInt(elem.style.top, 10));
+        }
+    });
+    isDragging = false;
+}
+
 function createSelectionBox(x, y) {
     selectionBox = document.createElement('div');
     selectionBox.className = 'selection-box';
@@ -64,15 +86,15 @@ function createSelectionBox(x, y) {
 
     selectionBox.style.left = `${x}px`;
     selectionBox.style.top = `${y}px`;
-    selectionBoxStartX = x;
-    selectionBoxStartY = y;
+    startX = x;
+    startY = y;
 }
 
 function expandSelectionBox(xx, yy) {
-    const x = Math.min(xx, selectionBoxStartX);
-    const y = Math.min(yy, selectionBoxStartY);
-    const w = Math.abs(xx - selectionBoxStartX);
-    const h = Math.abs(yy - selectionBoxStartY);
+    const x = Math.min(xx, startX);
+    const y = Math.min(yy, startY);
+    const w = Math.abs(xx - startX);
+    const h = Math.abs(yy - startY);
 
     selectionBox.style.left = `${x}px`;
     selectionBox.style.top = `${y}px`;

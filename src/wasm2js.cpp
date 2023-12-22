@@ -33,6 +33,24 @@ void eraseNode(const string& id) {
     eraseNode(std::string(id));
 }
 
+void moveNode(const string& id, const int x, const int y) {
+    auto& cc = K::Chronology::get_instance();
+    auto p = make_shared<K::MoveNodeEvent>(id, x, y);
+    cc.add_event(p);
+}
+[[cheerp::jsexport]] [[cheerp::genericjs]] void moveNodeW(const client::String& id, const int x, const int y) {
+    moveNode(std::string(id), x, y);
+}
+
+void updateDataNode(const string& id, const string& label, const string& info) {
+    auto& cc = K::Chronology::get_instance();
+    auto p = make_shared<K::UpdateDataNodeEvent>(id, label, info);
+    cc.add_event(p);
+}
+[[cheerp::jsexport]] [[cheerp::genericjs]] void updateDataNodeW(const client::String& id, const client::String& label, const client::String& info) {
+    updateDataNode(std::string(id), string(label), string(info));
+}
+
 [[cheerp::jsexport]] [[cheerp::genericjs]] void redoW() {
     auto& cc = K::Chronology::get_instance();
     cc.redo();

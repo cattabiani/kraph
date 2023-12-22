@@ -14,6 +14,47 @@ namespace K {
         return true;
     }
 
+    shared_ptr<K::Edge> Graph::erase_edge(const string& id) {
+        auto nh = edges_.extract(id);
+        if (nh.empty()) {
+            return nullptr;
+        }
+
+        auto fromIt = nodes_.find(nh.mapped().from_);
+        if (fromIt != nodes_.end()) {
+            fromIt->second.edges_.erase(id);
+        }
+
+        auto toIt = nodes_.find(nh.mapped().to_);
+        if (toIt != nodes_.end()) {
+            toIt->second.edges_.erase(id);
+        }
+
+        return make_shared<K::Edge>(nh.mapped());
+    }
+
+    K::Node* Graph::move_node(const string& id, int& x, int& y) {
+        auto it = nodes_.find(id);
+        if (it == nodes_.end()) {
+            return nullptr;
+        }
+
+        swap(it->second.x_, x);
+        swap(it->second.y_, y);
+        return &it->second;
+    }
+
+    K::Node* Graph::update_data_node(const string& id, string& label, string& info) {
+        auto it = nodes_.find(id);
+        if (it == nodes_.end()) {
+            return nullptr;
+        }
+
+        swap(it->second.label_, label);
+        swap(it->second.info_, info);
+        return &it->second;
+    }
+
     K::Edge* Graph::new_edge(const string& label, const string& info,
                              const string& fromId, const string& toId) {
 
@@ -46,24 +87,7 @@ namespace K {
         return false;
     }
 
-    shared_ptr<K::Edge> Graph::erase_edge(const string& id) {
-        auto nh = edges_.extract(id);
-        if (nh.empty()) {
-            return nullptr;
-        }
 
-        auto fromIt = nodes_.find(nh.mapped().from_);
-        if (fromIt != nodes_.end()) {
-            fromIt->second.edges_.erase(id);
-        }
-
-        auto toIt = nodes_.find(nh.mapped().to_);
-        if (toIt != nodes_.end()) {
-            toIt->second.edges_.erase(id);
-        }
-
-        return make_shared<K::Edge>(nh.mapped());
-    }
 
     // bool moveNode(const string& id, const int dx, const int dy) {
     //     auto it = nodes_.find(id);

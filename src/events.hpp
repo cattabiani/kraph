@@ -28,11 +28,8 @@ namespace K {
         bool is_reverse_;
         bool is_triggered_;
 
-        virtual ostream& print(std::ostream& os) const { 
-            return os << "Event";
-        }
         friend std::ostream& operator<<(std::ostream& os, const Event& obj) {
-            return obj.print(os);
+            return os << "Event: " << " t: " << obj.is_triggered_ << " r: " << obj.is_reverse_;
         }
 
         private:
@@ -47,11 +44,9 @@ namespace K {
 
         K::Node n_;
 
-        virtual ostream& print(std::ostream& os) const override { 
-            return os << "NewNodeEvent, " << n_ << " is_reverse_: " << is_reverse_ << " is_triggered_: " << is_triggered_;
-        }
         friend std::ostream& operator<<(std::ostream& os, const NewNodeEvent& obj) {
-            return obj.print(os);
+            const Event& base = obj;
+            return os << "NewNode" << base;
         }
 
         private:
@@ -62,7 +57,7 @@ namespace K {
             #endif
             void _updateNodeJ(bool ok) const {
                 #ifndef TESTS
-                if (!ok) { client::console.log("update node failed!"); }
+                if (!ok) { client::console.log("update node failed!"); return; }
                 client::updateNodeJ(n_.id_.c_str(), n_.label_.c_str(), n_.x_, n_.y_);
                 #endif
             }
@@ -71,10 +66,64 @@ namespace K {
             #endif
             void _eraseNodeJ(bool ok) const {
                 #ifndef TESTS
-                if (!ok) { client::console.log("erase node failed!"); }
+                if (!ok) { client::console.log("erase node failed!"); return; }
                 client::eraseNodeJ(n_.id_.c_str());
                 #endif
             }
     };
 
+
+    class MoveNodeEvent : public Event {
+    public:
+        MoveNodeEvent(const string& id, const int x, const int y) : id_(id), x_(x), y_(y) {}
+
+        string id_;
+        int x_;
+        int y_;
+
+        friend std::ostream& operator<<(std::ostream& os, const MoveNodeEvent& obj) {
+            const Event& base = obj;
+            return os << "MoveNode" << base;
+        }
+
+        private:
+            void _redo(K::Graph& gg) override;
+            void _undo(K::Graph& gg) override;
+            #ifndef TESTS
+            [[cheerp::genericjs]] 
+            #endif
+            void _updateNodeJ(const K::Node* n) const {
+                #ifndef TESTS
+                if (!n) { client::console.log("Move node failed!"); return; }
+                client::updateNodeJ(n->id_.c_str(), n->label_.c_str(), n->x_, n->y_);
+                #endif
+            }
+    };
+
+    class UpdateDataNodeEvent : public Event {
+    public:
+        UpdateDataNodeEvent(const string& id, const string& label, const string& info) : id_(id), label_(label), info_(info) {}
+
+        string id_;
+        string label_;
+        string info_;
+
+        friend std::ostream& operator<<(std::ostream& os, const UpdateDataNodeEvent& obj) {
+            const Event& base = obj;
+            return os << "UpdateDataNode" << base;
+        }
+
+        private:
+            void _redo(K::Graph& gg) override;
+            void _undo(K::Graph& gg) override;
+            #ifndef TESTS
+            [[cheerp::genericjs]] 
+            #endif
+            void _updateNodeJ(const K::Node* n) const {
+                #ifndef TESTS
+                if (!n) { client::console.log("UpdateData node failed!"); return; }
+                client::updateNodeJ(n->id_.c_str(), n->label_.c_str(), n->x_, n->y_);
+                #endif
+            }
+    };
 }

@@ -12,12 +12,22 @@ document.addEventListener("dblclick", async function (event) {
 document.addEventListener("mousedown", async function (event) { 
     if (isModalModeOn()) return;
 
-    if (isEmptySpace(event.target) && !event.ctrlKey) {
-        cancelSelection();
+    if (isEmptySpace(event.target)) {
+        if (!event.ctrlKey) {
+            cancelSelection();
+        }
+        
+        createSelectionBox(event.clientX, event.clientY);
+        isDragging = true;
         return;
     }
 
     if (isInSelection(event.target)) {
+        // moving
+        startX = event.clientX;
+        startY = event.clientY;
+        isDragging = true;
+        
         return;
     }
 
@@ -30,31 +40,37 @@ document.addEventListener("mousedown", async function (event) {
     }
 });
 
-document.addEventListener("mousedown", async function (event) { 
-    if (isModalModeOn()) return;
-    if (!isEmptySpace(event.target)) return;
-
-    createSelectionBox(event.clientX, event.clientY);
-    isDragging = true;
-});
-
 document.addEventListener('mousemove', function (event) {
+
     if (!isDragging) return;
     if (isModalModeOn()) return;
 
     event.preventDefault();
 
+    
+
     if (selectionBox) {
+        // bounding box
         expandSelectionBox(event.pageX, event.pageY);
+    } else {
+        let dx = event.clientX-startX;
+        let dy = event.clientY-startY;
+        moveSelection(dx, dy);
     }
 });
 
 document.addEventListener('mouseup', function (event) {
     if (!isDragging) return;
     if (isModalModeOn()) return;
-    if (!selectionBox) return;
+    if (selectionBox) {
+        selectWithSelectionBox();
+    } else {
+        moveSelectionW();
+    }
 
-    selectWithSelectionBox();
+
+
+    
 });
 
 
