@@ -16,6 +16,41 @@ function updateNodeJ(id, label, x, y) {
     return div;
 }
 
+function updateEdgeJ(id, label, fromId, toId, isFromPlug, isToPlug) {
+    debugLog("update edge " + id + " event cb");
+    from = document.getElementById(fromId);
+    to = document.getElementById(toId);
+
+    let edge = edges.get(id);
+    if (!edge) {
+        edge = new LeaderLine(from, end);
+    } else {
+        edge.start = from;
+        edge.end = to;
+    }
+    edge.middlelabel = label;
+    edge.startPlug = isFromPlug ? 'arrow1' : 'behind';
+    edge.endPlug = isToPlug ? 'arrow1' : 'behind';
+
+    if (id) {
+        edges.set(id, edge);
+    } else {
+        if (newEdge) {
+            newEdge.remove();
+            newEdge = null;
+        }
+        newEdge = edge;
+    }
+}
+
+
+
+function updateInvDiv(x, y) {
+    debugLog("update invDiv " + x + " " + y);
+    invDiv.style.left = x + 'px';
+    invDiv.style.top = y + 'px';
+}
+
 function eraseNodeJ(id) {
     debugLog("erase node " + id + " event cb");
     let div = document.getElementById(id);
@@ -23,6 +58,15 @@ function eraseNodeJ(id) {
         div.remove();
     }
     cancelSelection();
+}
+
+function eraseNEdgeJ(id) {
+    debugLog("erase edge " + id + " event cb");
+    let edge = edges.get(id);
+    if (edge) {
+        edge.remove();
+        edges.delete(id);
+    }
 }
 
 // additional Js only events
@@ -76,7 +120,6 @@ function moveSelectionW() {
             moveNodeW(elem.id, parseInt(elem.style.left, 10), parseInt(elem.style.top, 10));
         }
     });
-    isDragging = false;
 }
 
 function createSelectionBox(x, y) {
@@ -114,5 +157,4 @@ async function selectWithSelectionBox() {
 
     selectionBox.remove();
     selectionBox = null;
-    isDragging = false;
 }

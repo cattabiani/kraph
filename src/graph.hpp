@@ -1,10 +1,9 @@
 #pragma once
 
+#include <memory>
 #include <optional>
 #include <sstream>
-#include <memory>
 #include <unordered_map>
-
 
 #include "edge.hpp"
 #include "node.hpp"
@@ -18,15 +17,15 @@ namespace K {
     public:
         bool new_node(K::Node& n);
 
-        K::Edge* new_edge(const string& label, const string& info,
-                          const string& fromId, const string& toId);
+        bool new_edge(K::Edge& e);
 
         bool erase_node(K::Node& n);
 
-        K::Node* move_node(const string& id, int& x, int& y);
-        K::Node* update_data_node(const string& id, string& label, string& info);
+        bool erase_edge(K::Edge& e);
 
-        shared_ptr<K::Edge> erase_edge(const string& id);
+        K::Node* move_node(const string& id, int& x, int& y);
+        K::Node* update_data_node(const string& id, string& label,
+                                  string& info);
 
         size_t nodes_size() const { return nodes_.size(); }
 
@@ -41,13 +40,10 @@ namespace K {
             clear_edges();
         }
 
-
         friend std::ostream& operator<<(std::ostream& os, const Graph& obj) {
-            os << "Graph\nNodes:\n" << obj.nodes_
-               << "\nEdges:\n" << obj.edges_;
+            os << "Graph\nNodes:\n" << obj.nodes_ << "\nEdges:\n" << obj.edges_;
             return os;
         }
-
 
     private:
         unordered_map<string, Node> nodes_;

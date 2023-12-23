@@ -98,6 +98,11 @@
     /* Smooth transition for interactions */
 }
 
+.invDiv {
+    position: absolute;
+    background-color: #2e83a4;
+}
+
 .node:hover {
     transform: scale(1.05);
     /* Slightly enlarge on hover for visual feedback */
