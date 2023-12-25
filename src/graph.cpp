@@ -1,6 +1,7 @@
 
 
 #include "graph.hpp"
+#include "chronology.hpp"
 
 namespace K {
 
@@ -84,11 +85,21 @@ namespace K {
     bool Graph::erase_node(K::Node& n) {
         auto nh = nodes_.extract(n.id_);
         if (!nh.empty()) {
-            for (const auto& eid : nh.mapped().edges_) {
-                auto e = K::Edge(eid);
-                erase_edge(e);
-            }
             n = nh.mapped();
+            if (nh.mapped().edges_.empty())
+                return true;
+
+            auto& cc = K::Chronology::get_instance();
+            auto ene = cc.pop_back_event();
+            ene->is_triggered_ = true;
+
+            bool is_triggered = false;
+            for (const auto& eid : nh.mapped().edges_) {
+                auto p = make_shared<K::NewEdgeEvent>(eid, is_triggered);
+                is_triggered = true;
+                cc.add_event(p);
+            }
+            cc.push_back_event(ene);
             return true;
         }
         return false;

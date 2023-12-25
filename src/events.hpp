@@ -41,8 +41,9 @@ namespace K {
         bool is_reverse_;
         bool is_triggered_;
 
+        virtual string name() const { return "Event"; }
         friend std::ostream& operator<<(std::ostream& os, const Event& obj) {
-            return os << "Event: "
+            return os << obj.name() << ": "
                       << " t: " << obj.is_triggered_
                       << " r: " << obj.is_reverse_;
         }
@@ -58,14 +59,18 @@ namespace K {
             n_.x_ = x;
             n_.y_ = y;
         }
-        NewNodeEvent(const string id) : Event(true) { n_.id_ = id; }
+        NewNodeEvent(const string id, bool is_triggered)
+            : Event(true, is_triggered) {
+            n_.id_ = id;
+        }
 
         K::Node n_;
 
+        virtual string name() const override { return "NewNodeEvent"; }
         friend std::ostream& operator<<(std::ostream& os,
                                         const NewNodeEvent& obj) {
             const Event& base = obj;
-            return os << "NewNode" << base;
+            return os << base;
         }
 
     private:
@@ -102,18 +107,23 @@ namespace K {
 
     class NewEdgeEvent : public Event {
     public:
-        NewEdgeEvent(const string& from, const string& to) {
+        NewEdgeEvent(const string& from, const string& to, bool is_triggered)
+            : Event(false, is_triggered) {
             e_.from_ = from;
             e_.to_ = to;
         }
-        NewEdgeEvent(const string id) : Event(true) { e_.id_ = id; }
+        NewEdgeEvent(const string& id, bool is_triggered)
+            : Event(true, is_triggered) {
+            e_.id_ = id;
+        }
 
         K::Edge e_;
 
+        virtual string name() const override { return "NewEdgeEvent"; }
         friend std::ostream& operator<<(std::ostream& os,
                                         const NewEdgeEvent& obj) {
             const Event& base = obj;
-            return os << "NewEdge" << base;
+            return os << base;
         }
 
     private:
@@ -151,17 +161,19 @@ namespace K {
 
     class MoveNodeEvent : public Event {
     public:
-        MoveNodeEvent(const string& id, const int x, const int y)
-            : id_(id), x_(x), y_(y) {}
+        MoveNodeEvent(const string& id, const int x, const int y,
+                      bool is_triggered)
+            : id_(id), x_(x), y_(y), Event(false, is_triggered) {}
 
         string id_;
         int x_;
         int y_;
 
+        virtual string name() const override { return "MoveNodeEvent"; }
         friend std::ostream& operator<<(std::ostream& os,
                                         const MoveNodeEvent& obj) {
             const Event& base = obj;
-            return os << "MoveNode" << base;
+            return os << base;
         }
 
     private:
@@ -193,10 +205,11 @@ namespace K {
         string label_;
         string info_;
 
+        virtual string name() const override { return "UpdateDataNodeEvent"; }
         friend std::ostream& operator<<(std::ostream& os,
                                         const UpdateDataNodeEvent& obj) {
             const Event& base = obj;
-            return os << "UpdateDataNode" << base;
+            return os << base;
         }
 
     private:

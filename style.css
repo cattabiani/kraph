@@ -96,11 +96,13 @@
     /* Change cursor to indicate interactivity */
     transition: transform 0.2s;
     /* Smooth transition for interactions */
+    z-index: 1;
 }
 
 .invDiv {
     position: absolute;
     background-color: #2e83a4;
+    z-index: 0;
 }
 
 .node:hover {

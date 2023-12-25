@@ -12,11 +12,11 @@ using namespace std;
 [[cheerp::jsexport]] [[cheerp::genericjs]] void
 updateDataNodeW(const client::String& id, const client::String& label,
                 const client::String& info);
-[[cheerp::jsexport]] [[cheerp::genericjs]] void newNodeW(const int x,
-                                                         const int y);
+[[cheerp::jsexport]] [[cheerp::genericjs]] client::String*
+newNodeW(const int x, const int y);
 [[cheerp::jsexport]] [[cheerp::genericjs]] void
-newEdgeW(const client::String& fromId, const client::String& toId);
+newEdgeW(const client::String& fromId, const client::String& toId,
+         bool is_triggered);
 [[cheerp::jsexport]] [[cheerp::genericjs]] void
-eraseNodeW(const client::String& id);
-[[cheerp::jsexport]] [[cheerp::genericjs]] void
-moveNodeW(const client::String& id, const int x, const int y);
+moveNodeW(const client::String& id, const int x, const int y,
+          bool is_triggered);

@@ -15,44 +15,58 @@
     client::console.log(client::String(ss.str().c_str()));
 }
 
-void newNode(const int x, const int y) {
+string newNode(const int x, const int y) {
     auto& cc = K::Chronology::get_instance();
     auto p = make_shared<K::NewNodeEvent>(x, y);
     cc.add_event(p);
+    return p->n_.id_;
 }
-[[cheerp::jsexport]] [[cheerp::genericjs]] void newNodeW(const int x,
-                                                         const int y) {
-    newNode(x, y);
+[[cheerp::jsexport]] [[cheerp::genericjs]] client::String*
+newNodeW(const int x, const int y) {
+    auto s = newNode(x, y);
+    return new client::String(s.c_str());
 }
 
-void newEdge(const string& fromId, const string& toId) {
+void newEdge(const string& fromId, const string& toId, bool is_triggered) {
     auto& cc = K::Chronology::get_instance();
-    auto p = make_shared<K::NewEdgeEvent>(fromId, toId);
+    auto p = make_shared<K::NewEdgeEvent>(fromId, toId, is_triggered);
     cc.add_event(p);
 }
 [[cheerp::jsexport]] [[cheerp::genericjs]] void
-newEdgeW(const client::String& fromId, const client::String& toId) {
-    newEdge(std::string(fromId), std::string(toId));
+newEdgeW(const client::String& fromId, const client::String& toId,
+         bool is_triggered) {
+    newEdge(std::string(fromId), std::string(toId), is_triggered);
 }
 
-void eraseNode(const string& id) {
+void eraseNode(const string& id, bool is_triggered) {
     auto& cc = K::Chronology::get_instance();
-    auto p = make_shared<K::NewNodeEvent>(id);
+    auto p = make_shared<K::NewNodeEvent>(id, is_triggered);
     cc.add_event(p);
 }
 [[cheerp::jsexport]] [[cheerp::genericjs]] void
-eraseNodeW(const client::String& id) {
-    eraseNode(std::string(id));
+eraseNodeW(const client::String& id, bool is_triggered) {
+    eraseNode(std::string(id), is_triggered);
 }
 
-void moveNode(const string& id, const int x, const int y) {
+void eraseEdge(const string& id, bool is_triggered) {
     auto& cc = K::Chronology::get_instance();
-    auto p = make_shared<K::MoveNodeEvent>(id, x, y);
+    auto p = make_shared<K::NewEdgeEvent>(id, is_triggered);
     cc.add_event(p);
 }
 [[cheerp::jsexport]] [[cheerp::genericjs]] void
-moveNodeW(const client::String& id, const int x, const int y) {
-    moveNode(std::string(id), x, y);
+eraseEdgeW(const client::String& id, bool is_triggered) {
+    eraseEdge(std::string(id), is_triggered);
+}
+
+void moveNode(const string& id, const int x, const int y, bool is_triggered) {
+    auto& cc = K::Chronology::get_instance();
+    auto p = make_shared<K::MoveNodeEvent>(id, x, y, is_triggered);
+    cc.add_event(p);
+}
+[[cheerp::jsexport]] [[cheerp::genericjs]] void
+moveNodeW(const client::String& id, const int x, const int y,
+          bool is_triggered) {
+    moveNode(std::string(id), x, y, is_triggered);
 }
 
 void updateDataNode(const string& id, const string& label, const string& info) {

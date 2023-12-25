@@ -2,17 +2,17 @@
 
 // new node
 document.addEventListener("dblclick", async function (event) {
-    newNodeW.promise.then(function () {
-        debugLog("new node action");
-        newNodeW(event.clientX, event.clientY);
-    });
+    if (isModalModeOn()) return;
+
+    await newNode(event.clientX, event.clientY);
+
 });
 
 
 document.addEventListener("mousedown", async function (event) {
+    isDragging = true;
     if (isModalModeOn()) return;
 
-    isDragging = true;
     if (isEmptySpace(event.target)) {
         if (!event.ctrlKey) {
             cancelSelection();
@@ -23,6 +23,7 @@ document.addEventListener("mousedown", async function (event) {
     }
 
     if (isInSelection(event.target) && !event.altKey) {
+
         // moving
         startX = event.clientX;
         startY = event.clientY;
@@ -38,53 +39,76 @@ document.addEventListener("mousedown", async function (event) {
     }
 
     if (event.altKey) {
-        updateInvDiv(event.clientX, event.clientY);
-        updateEdgeJ("", "New Edge", event.target, invDiv, false, true);
+        newEdge = new LeaderLine(event.target, invDiv);
+        newEdge.middleLabel = "New Edge";
+        updateNewEdge(event.clientX, event.clientY, event.target);
     }
 });
 
 document.addEventListener('mousemove', function (event) {
+    if (isModalModeOn()) return;
+    if (!isDragging) return;
 
-    if (isDragging && selectionBox && !isModalModeOn()) {
+    if (selectionBox) {
         // bounding box
         event.preventDefault();
         expandSelectionBox(event.pageX, event.pageY);
+        return;
     }
-    if (isDragging && !selectionBox && !newEdge && !isModalModeOn()) {
+    if (!newEdge) {
         event.preventDefault();
         let dx = event.clientX - startX;
         let dy = event.clientY - startY;
         moveSelection(dx, dy);
+        return;
     }
-    if (isDragging && newEdge) {
-        updateInvDiv(event.clientX, event.clientY);
-        newEdge.position();
-        console.log("new line move");
-    }
+
+    updateNewEdge(event.clientX, event.clientY, event.target);
 });
 
-document.addEventListener('mouseup', function (event) {
+document.addEventListener('mouseup', async function (event) {
+    isDragging = false;
+    if (isModalModeOn()) return;
+
     if (selectionBox) {
         selectWithSelectionBox();
+        return;
     }
 
-    if (isDragging && !newEdge && !selectionBox && !isModalModeOn()) {
+    if (!newEdge && !selectionBox) {
         moveSelectionW();
     }
 
+
+
     if (newEdge) {
-        console.log("lock new node here " + event.clientX + ' ' + event.clientY);
+
+        var toId;
+        let es = isEmptySpace(event.target);
+        if (es) {
+            toId = await newNode(event.clientX, event.clientY);
+        } else {
+            toId = event.target.id;
+        }
+
+
+        let fromId = newEdge.start.id;
+        await newEdgeW(fromId, toId, es);
+
         newEdge.remove();
         newEdge = null;
+        updateInvDiv(event.clientX, event.clientY, true);
     }
 
-    isDragging = false;
+
 });
 
 
 
 // print graph
 document.addEventListener('keydown', async function (event) {
+    if (isModalModeOn()) return;
+
     if (event.key === 'g') {
         printGraphW.promise.then(function () {
             printGraphW();
@@ -105,7 +129,7 @@ document.addEventListener('keydown', async function (event) {
             undoW();
         });
     }
-    if (!isModalModeOn() && event.key === 'Delete') {
+    if (event.key === 'Delete') {
         eraseSelection();
     }
 });

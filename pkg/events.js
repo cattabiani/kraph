@@ -16,40 +16,59 @@ function updateNodeJ(id, label, x, y) {
     return div;
 }
 
+function moveEdge(id) {
+    let edge = edges.get(id);
+    if (edge) {
+        edge.position();
+    }
+}
+
 function updateEdgeJ(id, label, fromId, toId, isFromPlug, isToPlug) {
-    debugLog("update edge " + id + " event cb");
-    from = document.getElementById(fromId);
-    to = document.getElementById(toId);
+    debugLog("update edge " + id + " from " + fromId + " to " + toId + " event cb");
+    let from = document.getElementById(fromId);
+    let to = document.getElementById(toId);
 
     let edge = edges.get(id);
     if (!edge) {
-        edge = new LeaderLine(from, end);
+        edge = new LeaderLine(from, to);
     } else {
         edge.start = from;
         edge.end = to;
     }
-    edge.middlelabel = label;
+    edge.middleLabel = label;
     edge.startPlug = isFromPlug ? 'arrow1' : 'behind';
     edge.endPlug = isToPlug ? 'arrow1' : 'behind';
 
-    if (id) {
-        edges.set(id, edge);
-    } else {
-        if (newEdge) {
-            newEdge.remove();
-            newEdge = null;
-        }
-        newEdge = edge;
-    }
+    edges.set(id, edge);
 }
 
 
-
-function updateInvDiv(x, y) {
+function updateInvDiv(x, y, isInvisible) {
     debugLog("update invDiv " + x + " " + y);
+
+    if (!isInvisible) {
+        invDiv.className = "node";
+        invDiv.textContent = "New Node";
+        invDiv.style.zIndex = 0;
+    } else {
+        invDiv.className = "invDiv";
+        invDiv.textContent = "";
+    }
     invDiv.style.left = x + 'px';
     invDiv.style.top = y + 'px';
 }
+
+function updateNewEdge(x, y, tgt) {
+    if (!newEdge) return;
+    debugLog("update new edge " + x + " " + y);
+
+    let isInvisible = !isEmptySpace(tgt);
+    updateInvDiv(x, y, isInvisible);
+
+    newEdge.end = (isInvisible && tgt != newEdge.start) ? tgt : invDiv;
+    newEdge.position();
+}
+
 
 function eraseNodeJ(id) {
     debugLog("erase node " + id + " event cb");
@@ -60,7 +79,7 @@ function eraseNodeJ(id) {
     cancelSelection();
 }
 
-function eraseNEdgeJ(id) {
+function eraseEdgeJ(id) {
     debugLog("erase edge " + id + " event cb");
     let edge = edges.get(id);
     if (edge) {
@@ -89,12 +108,22 @@ function select(elem) {
     selection.add(elem);
 }
 
+async function newNode(x, y) {
+    let id = await newNodeW(x, y);
+    debugLog("new node event " + id);
+    let newNodeElement = document.getElementById(id);
+    select(newNodeElement);
+    return id;
+}
+
 function eraseSelection() {
     debugLog("erase selection event");
+    let isTriggered = false;
     selection.forEach(elem => {
         if (isNode(elem)) {
             eraseNodeW.promise.then(function () {
-                eraseNodeW(elem.id);
+                eraseNodeW(elem.id, isTriggered);
+                isTriggered = true;
             });
         }
     });
@@ -115,9 +144,11 @@ function moveSelection(dx, dy) {
 
 function moveSelectionW() {
     debugLog("move selection event w");
+    let isTriggered = false;
     selection.forEach(elem => {
         if (isNode(elem)) {
-            moveNodeW(elem.id, parseInt(elem.style.left, 10), parseInt(elem.style.top, 10));
+            moveNodeW(elem.id, parseInt(elem.style.left, 10), parseInt(elem.style.top, 10), isTriggered);
+            isTriggered = true;
         }
     });
 }
