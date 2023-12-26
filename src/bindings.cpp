@@ -33,3 +33,20 @@ newNodeW(const int x, const int y) {
 [[cheerp::genericjs]] void K::eraseEdgeJ(const string& id) {
     client::eraseEdgeJ(K::str2Str(id));
 }
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] void printGraphW() {
+    auto& gg = K::Graph::get_instance();
+    stringstream ss;
+    ss << gg << endl;
+    client::console.log(client::String(ss.str().c_str()));
+}
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] void redoW() {
+    auto& gg = K::Graph::get_instance();
+    gg.redo();
+}
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] void undoW() {
+    auto& gg = K::Graph::get_instance();
+    gg.undo();
+}

@@ -8,6 +8,10 @@ using namespace std;
 [[cheerp::jsexport]] [[cheerp::genericjs]] client::String*
 newNodeW(const int x, const int y);
 
+[[cheerp::jsexport]] [[cheerp::genericjs]] void printGraphW();
+[[cheerp::jsexport]] [[cheerp::genericjs]] void redoW();
+[[cheerp::jsexport]] [[cheerp::genericjs]] void undoW();
+
 namespace [[cheerp::genericjs]] client {
     void updateNodeJ(const String& id, const String& label, const int x,
                      const int y);
