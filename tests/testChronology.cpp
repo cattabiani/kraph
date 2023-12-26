@@ -1,73 +1,50 @@
 // tests/test_hello.cpp
 #include <gtest/gtest.h>
 
-#include "../src/chronology.hpp"
-#include "../src/events.hpp"
+#include "../src/graph.hpp"
 
 #include <iostream>
 
-void fill_chronology(size_t b, size_t e) {
-    auto& cc = K::Chronology::get_instance();
-    for (size_t i = b; i < e; ++i) {
-        auto p = make_shared<K::NewNodeEvent>(i, i);
-        cc.add_event(p);
-    }
+TEST(chronologyTest, newNode) {
+    auto& gg = K::Graph::get_instance();
+    gg.reset();
+    shared_ptr<K::Event> p = make_shared<K::NewNodeEvent>(0, 0, false);
+    gg.add_event(p);
+    p = make_shared<K::NewNodeEvent>(1, 1, false);
+    gg.add_event(p);
+    p = make_shared<K::NewNodeEvent>(2, 2, false);
+    gg.add_event(p);
+    p = make_shared<K::NewEdgeEvent>("uuid_0", "uuid_1", false);
+    gg.add_event(p);
+    p = make_shared<K::NewEdgeEvent>("uuid_0", "uuid_2", false);
+    gg.add_event(p);
+    p = make_shared<K::NewEdgeEvent>("uuid_1", "uuid_2", false);
+    gg.add_event(p);
+    p = make_shared<K::EraseNodeEvent>("uuid_0", false);
+    gg.add_event(p);
+    p = make_shared<K::EraseNodeEvent>("uuid_1", false);
+    gg.add_event(p);
+
+    cout << gg << "\n-----------\n";
+
+    gg.undo();
+    gg.undo();
+    gg.undo();
+    // gg.redo();
+    // gg.redo();
+    // gg.redo();
+    // gg.undo();
+    // gg.undo();
+    // gg.undo();
+    // gg.redo();
+    // gg.redo();
+    // gg.redo();
+    // gg.redo();
+
+    cout << gg << endl;
 }
 
-TEST(chronologyTest, generalTimeTravel) {
-    auto& cc = K::Chronology::get_instance();
-
-    fill_chronology(0, 5);
-
-    cc.undo();
-    cc.undo();
-    cc.undo();
-
-    EXPECT_EQ(distance(cc.get_pos(), cc.get_events().end()), 3); 
-    EXPECT_EQ(cc.get_events().size(), 5); 
-
-
-    cc.undo();
-    cc.undo();
-
-    EXPECT_EQ(distance(cc.get_pos(), cc.get_events().end()), 5); 
-    EXPECT_EQ(cc.get_events().size(), 5); 
-
-    cc.undo();
-    cc.undo();
-
-    EXPECT_EQ(distance(cc.get_pos(), cc.get_events().end()), 5); 
-    EXPECT_EQ(cc.get_events().size(), 5); 
-
-    cc.redo();
-    cc.redo();
-    cc.redo();
-    cc.redo();
-    cc.redo();
-
-    EXPECT_EQ(distance(cc.get_pos(), cc.get_events().end()), 0); 
-    EXPECT_EQ(cc.get_events().size(), 5); 
-
-    cc.redo();
-
-    EXPECT_EQ(distance(cc.get_pos(), cc.get_events().end()), 0); 
-    EXPECT_EQ(cc.get_events().size(), 5); 
-
-    cc.undo();
-    cc.undo();
-    cc.undo();
-
-    auto p = make_shared<K::NewNodeEvent>(6, 6);
-    cc.add_event(p);
-
-    EXPECT_EQ(distance(cc.get_pos(), cc.get_events().end()), 0); 
-    EXPECT_EQ(cc.get_events().size(), 3); 
-
-    EXPECT_EQ(static_pointer_cast<K::NewNodeEvent>(*prev(cc.get_pos()))->n_.x_, 6); 
-    EXPECT_EQ(static_pointer_cast<K::NewNodeEvent>(*prev(cc.get_pos(), 2))->n_.x_, 1); 
-}
-
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

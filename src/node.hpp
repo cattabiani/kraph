@@ -24,9 +24,7 @@ namespace K {
 
         friend std::ostream& operator<<(std::ostream& os, const Node& obj) {
 
-            os << "Node, id: " << obj.id_ << ", label: " << obj.label_
-               << ", x: " << obj.x_ << ", y: " << obj.y_
-               << "edges: " << obj.edges_;
+            os << "Node: " << obj.id_ << ", edges: " << obj.edges_;
             return os;
         }
     };

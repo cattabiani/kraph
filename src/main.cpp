@@ -1,6 +1,5 @@
-
-#include "wasm2js.hpp"
-#include "chronology.hpp"
+#include "bindings.hpp"
+#include "graph.hpp"
 
 using namespace std;
 
