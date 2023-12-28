@@ -1,3 +1,8 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -121,4 +126,26 @@
     /* Slightly larger scale for emphasis */
     transition: transform 0.2s, box-shadow 0.2s, border 0.2s, background-color 0.2s;
     /* Smooth transition for all changes */
+}
+
+.edge {
+    stroke: orange;
+    /* Orange color */
+    stroke-width: 3;
+    /* Slightly thicker line for visibility */
+    stroke-dasharray: none;
+    /* Continuous line, no dashes */
+    stroke-linecap: butt;
+    /* Round line caps for a smoother look */
+    fill: none;
+    /* No fill needed for a line */
+}
+
+.edge-label {
+    fill: orange;
+    text-anchor: middle;
+    dominant-baseline: hanging;
+    stroke: white;
+    stroke-width: 2px;
+    paint-order: stroke;
 }

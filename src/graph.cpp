@@ -85,6 +85,7 @@ void K::Graph::new_edge(K::NewEdgeEvent& e) {
     if (q.id_.empty()) {
         q.id_ = uuid_factory_.generate();
         q.label_ = "New Edge";
+        q.is_to_plug_ = true;
     }
 
     edges_[q.id_] = q;
@@ -93,7 +94,8 @@ void K::Graph::new_edge(K::NewEdgeEvent& e) {
 
 #ifndef TESTS
     // emit js
-    K::updateEdgeJ(q.id_, q.label_, q.from_, q.to_);
+    K::updateEdgeJ(q.id_, q.label_, q.from_, q.to_, q.is_from_plug_,
+                   q.is_to_plug_);
 #endif
 
     auto p = make_shared<K::EraseEdgeEvent>(q, e.is_triggered_);
@@ -117,6 +119,8 @@ void K::Graph::erase_node(K::EraseNodeEvent& e) {
     K::eraseNodeJ(q.id_);
 #endif
 
+    // we do not need the edges to create the node
+    q.edges_.clear();
     auto p = make_shared<K::NewNodeEvent>(q, e.is_triggered_);
     events_.insert(pos_, p);
 }

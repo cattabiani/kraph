@@ -3,12 +3,13 @@ document.addEventListener("dblclick", async function (event) {
     if (isModalModeOn()) return;
     if (!isEmptySpace(event.target)) return;
 
-    await newNode(event.clientX, event.clientY);
+    await newNode(event.clientX, event.clientY, false);
 });
 
 
 
 document.addEventListener("mousedown", async function (event) {
+    debugLog("eventTarget: " + event.target + ' ' + event.target.class);
     isDragging = true;
     if (isModalModeOn()) return;
 
@@ -28,7 +29,12 @@ document.addEventListener("mousedown", async function (event) {
             cancelSelection();
         }
         select(event.target);
-        return;
+    }
+
+    if (isNode(event.target) && event.altKey) {
+        newLL = new LeaderLine(event.target, invDiv);
+        newLL.middleLabel = "New Edge";
+        updateNewLL(event.clientX, event.clientY, event.target);
     }
 });
 
@@ -42,6 +48,12 @@ document.addEventListener('mousemove', function (event) {
         expandSelectionBox(event.pageX, event.pageY);
         return;
     }
+
+    // new edge
+    if (newLL) {
+        updateNewLL(event.clientX, event.clientY, event.target);
+        return;
+    }
 });
 
 document.addEventListener('mouseup', async function (event) {
@@ -52,6 +64,10 @@ document.addEventListener('mouseup', async function (event) {
     if (selectionBox) {
         selectWithSelectionBox();
         return;
+    }
+
+    if (newLL) {
+        newEdge(event.clientX, event.clientY, event.target);
     }
 });
 
@@ -82,6 +98,6 @@ document.addEventListener('keydown', async function (event) {
 
     // delete selection
     if (event.key === 'Delete') {
-        eraseSelection();
+        await eraseSelection();
     }
 });
