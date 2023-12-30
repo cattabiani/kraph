@@ -94,39 +94,22 @@ async function selectWithSelectionBox() {
 }
 
 function eraseNodeJ(id) {
-    debugLog("eraseNodeJ " + id);
-    let div = document.getElementById(id);
-    if (div) {
-        div.remove();
-    }
+    eraseId(id);
+
     cancelSelection();
 }
 
-function updateNewLL(x, y, tgt) {
-    if (!newLL) return;
-
-    let isInvisible = !isEmptySpace(tgt);
-    updateInvDiv(x, y, isInvisible);
-
-    newLL.end = (isInvisible && tgt != newLL.start) ? tgt : invDiv;
-    newLL.position();
-}
 
 async function newEdge(x, y, tgt) {
     var toId;
-    if (isEmptySpace(tgt)) {
+    if (!isNode(tgt)) {
         toId = await newNode(x, y, true);
     } else {
         toId = tgt.id;
     }
 
-
-    let fromId = newLL.start.id;
-    await newEdgeW(fromId, toId, false);
-
-    newLL.remove();
-    newLL = null;
-    updateInvDiv(x, y, true);
+    await newEdgeW(fakeEdgeFromId, toId, false);
+    fakeEdgeFromId = null;
 }
 
 function updateInvDiv(x, y, isInvisible) {
@@ -146,46 +129,39 @@ function updateInvDiv(x, y, isInvisible) {
 function updateEdgeJ(id, label, fromId, toId, isFromPlug, isToPlug) {
     debugLog("updateEdgeJ " + id + " from " + fromId + " to " + toId);
     let from = document.getElementById(fromId);
-    let to = document.getElementById(toId);
-
-    let edge = edges.get(id);
-    var div;
-    if (!edge) {
-        edge = new LeaderLine(from, to);
-        div = document.createElement('div');
-        document.body.appendChild(div);
-        div.className = 'edge';
-        div.id = id;
-    } else {
-        edge.start = from;
-        edge.end = to;
-        div = document.getElementById(id);
+    if (!from) {
+        debugLog("From div " + fromId + " is missing!");
+        return;
     }
-
-    div.textContent = label;
-    let v = getMiddleLabelPosition(edge);
-    div.style.left = v.x + 'px';
-    div.style.top = v.y + 'px';
-    // edge.middleLabel = label;
-    edge.startPlug = isFromPlug ? 'arrow1' : 'behind';
-    edge.endPlug = isToPlug ? 'arrow1' : 'behind';
-
-    edges.set(id, edge);
+    let to = document.getElementById(toId);
+    if (!to) {
+        debugLog("To div " + fromTo + " is missing!");
+        return;
+    }
+    let pp = getConnectingLineExrtemes(from, to);
+    let midPoint = pp.from.add(pp.to, 1.0).multiply(0.5);
+    updateEdgeLine(id, pp.from, pp.to, isFromPlug, isToPlug);
+    updateEdgeLabel(id, label, midPoint);
 }
 
-
-
-
-
-
 function eraseEdgeJ(id) {
-    debugLog("eraseEdgeJ " + id);
-    let edge = edges.get(id);
-    let div = document.getElementById(id);
-    div.remove();
-    if (edge) {
-        edge.remove();
-        edges.delete(id);
-    }
+    eraseId(id + "-line");
+    eraseId(id + "-label");
+}
+
+function updateFakeEdge(x, y, tgt) {
+    let isTgtNode = isNode(tgt);
+    updateInvDiv(x, y, isTgtNode);
+
+
+    let toId = (isTgtNode && tgt.id != fakeEdgeFromId) ? tgt.id : "invDiv";
+    updateEdgeJ("fakeEdge", "New Edge", fakeEdgeFromId, toId, false, true);
+}
+
+function eraseFakeEdge() {
+    eraseId("fakeEdge-line");
+    eraseId("fakeEdge-label");
+    updateInvDiv(0, 0, true);
+
 }
 

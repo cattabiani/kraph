@@ -7,7 +7,7 @@ function isNode(elem) {
 }
 
 function isEdge(elem) {
-    return elem.matches('.edge');
+    return elem.matches('.edge-line') || elem.matches('.edge-label');
 }
 
 function isEmptySpace(elem) {
@@ -28,6 +28,14 @@ function isInSelection(node) {
     return false;
 }
 
+
+function eraseId(id) {
+    debugLog("eraseId " + id);
+    let div = document.getElementById(id);
+    if (div) {
+        div.remove();
+    }
+}
 
 // Debug logging function
 function debugLog(message) {

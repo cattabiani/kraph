@@ -128,7 +128,7 @@ body {
     /* Smooth transition for all changes */
 }
 
-.edge {
+.edge-line {
     stroke: orange;
     /* Orange color */
     stroke-width: 3;
@@ -148,4 +148,5 @@ body {
     stroke: white;
     stroke-width: 2px;
     paint-order: stroke;
+    cursor: pointer;
 }

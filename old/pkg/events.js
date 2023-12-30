@@ -23,24 +23,24 @@ function moveEdge(id) {
     }
 }
 
-function updateEdgeJ(id, label, fromId, toId, isFromPlug, isToPlug) {
-    debugLog("update edge " + id + " from " + fromId + " to " + toId + " event cb");
-    let from = document.getElementById(fromId);
-    let to = document.getElementById(toId);
+// function updateEdgeJ(id, label, fromId, toId, isFromPlug, isToPlug) {
+//     debugLog("update edge " + id + " from " + fromId + " to " + toId + " event cb");
+//     let from = document.getElementById(fromId);
+//     let to = document.getElementById(toId);
 
-    let edge = edges.get(id);
-    if (!edge) {
-        edge = new LeaderLine(from, to);
-    } else {
-        edge.start = from;
-        edge.end = to;
-    }
-    edge.middleLabel = label;
-    edge.startPlug = isFromPlug ? 'arrow1' : 'behind';
-    edge.endPlug = isToPlug ? 'arrow1' : 'behind';
+//     let edge = edges.get(id);
+//     if (!edge) {
+//         edge = new LeaderLine(from, to);
+//     } else {
+//         edge.start = from;
+//         edge.end = to;
+//     }
+//     edge.middleLabel = label;
+//     edge.startPlug = isFromPlug ? 'arrow1' : 'behind';
+//     edge.endPlug = isToPlug ? 'arrow1' : 'behind';
 
-    edges.set(id, edge);
-}
+//     edges.set(id, edge);
+// }
 
 
 function updateInvDiv(x, y, isInvisible) {

@@ -2,15 +2,10 @@
 
 
 
-updateNodeJ("1", "me", 500, 500);
-updateNodeJ("2", "New Node 2", 800, 800);
+// updateNodeJ("1", "me", 500, 500);
+// updateNodeJ("2", "New Node 2", 800, 800);
 
-let div1 = document.getElementById("1");
-let div2 = document.getElementById("2");
-
-let line = getConnectingLine(div1, div2);
-let edge = new Edge("aa", "New Edge", line.from, line.to, false, true);
-edge.draw();
+// updateEdgeJ("3", "bau", "1", "2", true, true);
 
 // let pp = getDivPoints(div1);
 

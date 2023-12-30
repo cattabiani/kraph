@@ -9,7 +9,7 @@ document.addEventListener("dblclick", async function (event) {
 
 
 document.addEventListener("mousedown", async function (event) {
-    debugLog("eventTarget: " + event.target + ' ' + event.target.class);
+    debugLog("eventTarget: " + event.target + ' ' + event.target.id);
     isDragging = true;
     if (isModalModeOn()) return;
 
@@ -32,9 +32,8 @@ document.addEventListener("mousedown", async function (event) {
     }
 
     if (isNode(event.target) && event.altKey) {
-        newLL = new LeaderLine(event.target, invDiv);
-        newLL.middleLabel = "New Edge";
-        updateNewLL(event.clientX, event.clientY, event.target);
+        fakeEdgeFromId = event.target.id;
+        updateFakeEdge(event.clientX, event.clientY, event.target);
     }
 });
 
@@ -50,8 +49,9 @@ document.addEventListener('mousemove', function (event) {
     }
 
     // new edge
-    if (newLL) {
-        updateNewLL(event.clientX, event.clientY, event.target);
+    if (fakeEdgeFromId) {
+        event.preventDefault();
+        updateFakeEdge(event.clientX, event.clientY, event.target);
         return;
     }
 });
@@ -66,8 +66,9 @@ document.addEventListener('mouseup', async function (event) {
         return;
     }
 
-    if (newLL) {
+    if (fakeEdgeFromId) {
         newEdge(event.clientX, event.clientY, event.target);
+        eraseFakeEdge();
     }
 });
 
