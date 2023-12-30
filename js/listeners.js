@@ -24,12 +24,10 @@ document.addEventListener("mousedown", async function (event) {
     }
 
     // single selection
-    if (isNode(event.target)) {
-        if (!event.ctrlKey) {
-            cancelSelection();
-        }
-        select(event.target);
+    if (!event.ctrlKey) {
+        cancelSelection();
     }
+    select(event.target);
 
     if (isNode(event.target) && event.altKey) {
         fakeEdgeFromId = event.target.id;

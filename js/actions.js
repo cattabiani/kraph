@@ -24,8 +24,11 @@ function updateNodeJ(id, label, x, y) {
 function cancelSelection() {
     debugLog("cancelSelection");
     selection.forEach(elem => {
-        if (elem && isNode(elem)) {
+        if (isNode(elem)) {
             elem.classList.remove('node-selected');
+        }
+        if (isEdge(elem)) {
+            elem.classList.remove('edge-label-selected');
         }
     });
     selection.clear();
@@ -35,6 +38,14 @@ async function eraseSelection() {
     debugLog("eraseSelection");
     let l = selection.size - 1;
     let idx = 0;
+    selection.forEach(elem => {
+        if (isEdge(elem)) {
+            eraseEdgeW.promise.then(function () {
+                eraseEdgeW(elem.id.split('-')[0], !(idx === l));
+                idx++;
+            });
+        }
+    });
     selection.forEach(elem => {
         if (isNode(elem)) {
             eraseNodeW.promise.then(function () {
@@ -48,9 +59,14 @@ async function eraseSelection() {
 
 
 function select(elem) {
+    if (!elem) return;
     debugLog("select " + elem.id);
     if (isNode(elem)) {
         elem.classList.add('node-selected');
+    }
+
+    if (isEdge(elem)) {
+        elem.classList.add('edge-label-selected');
     }
     selection.add(elem);
 }
@@ -86,6 +102,14 @@ async function selectWithSelectionBox() {
         if (rect.left < nodeRect.right && rect.right > nodeRect.left &&
             rect.top < nodeRect.bottom && rect.bottom > nodeRect.top) {
             select(node);
+        }
+    });
+
+    Array.from(document.getElementsByClassName('edge-label')).forEach(edge => {
+        const edgeRect = edge.getBoundingClientRect();
+        if (rect.left < edgeRect.right && rect.right > edgeRect.left &&
+            rect.top < edgeRect.bottom && rect.bottom > edgeRect.top) {
+            select(edge);
         }
     });
 

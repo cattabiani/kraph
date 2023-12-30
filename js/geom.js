@@ -23,9 +23,9 @@ class Point {
 
     resizeSvg(svg) {
         let svgWidth = svg.getAttribute("width");
-        svg.setAttribute("width", Math.max(svgWidth, this.x));
+        svg.setAttribute("width", Math.max(svgWidth, this.x + 10));
         let svgHeight = svg.getAttribute("height");
-        svg.setAttribute("height", Math.max(svgHeight, this.y));
+        svg.setAttribute("height", Math.max(svgHeight, this.y + 10));
     }
 
     draw() {

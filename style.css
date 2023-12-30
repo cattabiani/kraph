@@ -104,11 +104,7 @@ body {
     z-index: 1;
 }
 
-.invDiv {
-    position: absolute;
-    background-color: #2e83a4;
-    z-index: 0;
-}
+
 
 .node:hover {
     transform: scale(1.05);
@@ -141,6 +137,12 @@ body {
     /* No fill needed for a line */
 }
 
+.invDiv {
+    position: absolute;
+    background-color: #2e83a4;
+    z-index: 0;
+}
+
 .edge-label {
     fill: orange;
     text-anchor: middle;
@@ -149,4 +151,21 @@ body {
     stroke-width: 2px;
     paint-order: stroke;
     cursor: pointer;
+}
+
+.edge-label-selected {
+    font-weight: bold;
+    /* Bolder text for emphasis */
+    cursor: pointer;
+    /* Maintain pointer cursor for consistency */
+    text-anchor: middle;
+    /* Keep text centered */
+    dominant-baseline: hanging;
+    /* Maintain text baseline alignment */
+    font-size: 17px;
+    /* Slightly larger font size for emphasis */
+    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.6));
+    /* Shadow for depth without a border */
+    transition: fill 0.2s, font-size 0.2s, filter 0.2s;
+    /* Smooth transition for changes */
 }
