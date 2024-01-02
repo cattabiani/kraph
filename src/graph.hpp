@@ -28,6 +28,8 @@ namespace K {
         void erase_node(K::EraseNodeEvent& e);
         void new_edge(K::NewEdgeEvent& e);
         void erase_edge(K::EraseEdgeEvent& e);
+        void move_node(K::MoveNodeEvent& e);
+        void flip_edge_plug(K::FlipEdgePlugEvent& e);
 
         void clear_nodes() { nodes_.clear(); }
         void clear_edges() { edges_.clear(); }
@@ -46,6 +48,8 @@ namespace K {
 
         const K::Node* get_node(const string& id) const;
         const K::Edge* get_edge(const string& id) const;
+        unordered_set<string>
+        get_connected_edges(const vector<string>& v) const;
 
         size_t size_nodes() const { return nodes_.size(); }
         size_t size_edges() const { return edges_.size(); }

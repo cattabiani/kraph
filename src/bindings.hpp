@@ -14,9 +14,13 @@ newEdgeW(const client::String& fromId, const client::String& toId,
          bool is_triggered);
 [[cheerp::jsexport]] [[cheerp::genericjs]] void
 eraseEdgeW(const client::String& id, bool is_triggered);
-// [[cheerp::jsexport]] [[cheerp::genericjs]] void
-// moveNodeW(const client::String& id, const int x, const int y,
-//           bool is_triggered);
+[[cheerp::jsexport]] [[cheerp::genericjs]] void
+moveNodeW(const client::String& id, const int x, const int y,
+          bool is_triggered);
+[[cheerp::jsexport]] [[cheerp::genericjs]] client::Array*
+getConnectedEdgesW(client::Array& a);
+[[cheerp::jsexport]] [[cheerp::genericjs]] void
+flipEdgePlugW(const client::String& id, const bool is_from, bool is_triggered);
 // [[cheerp::jsexport]] [[cheerp::genericjs]] void
 // updateDataNodeW(const client::String& id, const client::String& label,
 //                 const client::String& info);

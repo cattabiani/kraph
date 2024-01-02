@@ -148,3 +148,64 @@ void K::Graph::erase_edge(K::EraseEdgeEvent& e) {
     auto p = make_shared<K::NewEdgeEvent>(q, e.is_triggered_);
     events_.insert(pos_, p);
 }
+
+unordered_set<string>
+K::Graph::get_connected_edges(const vector<string>& v) const {
+    unordered_set<string> ans;
+    for (const auto& i : v) {
+        auto it = nodes_.find(i);
+        if (it != nodes_.end()) {
+            ans.insert(it->second.edges_.begin(), it->second.edges_.end());
+        }
+    }
+    return ans;
+}
+
+void K::Graph::move_node(K::MoveNodeEvent& e) {
+    auto it = nodes_.find(e.id_);
+    if (it == nodes_.end()) {
+        return;
+    }
+
+    auto& q = it->second;
+
+    swap(e.x_, q.x_);
+    swap(e.y_, q.y_);
+
+#ifndef TESTS
+    // emit js
+    for (const auto& eid : q.edges_) {
+        auto eit = edges_.find(eid);
+        if (eit != edges_.end()) {
+            auto& eq = eit->second;
+            K::updateEdgeJ(eq.id_, eq.label_, eq.from_, eq.to_,
+                           eq.is_from_plug_, eq.is_to_plug_);
+        }
+    }
+    K::updateNodeJ(q.id_, q.label_, q.x_, q.y_);
+#endif
+
+    auto p = make_shared<K::MoveNodeEvent>(e);
+    events_.insert(pos_, p);
+}
+
+void K::Graph::flip_edge_plug(K::FlipEdgePlugEvent& e) {
+    auto it = edges_.find(e.id_);
+    if (it == edges_.end()) {
+        return;
+    }
+
+    auto& q = it->second;
+
+    auto& plug = e.is_from_ ? q.is_from_plug_ : q.is_to_plug_;
+    plug = !plug;
+
+#ifndef TESTS
+    // emit js
+    K::updateEdgeJ(q.id_, q.label_, q.from_, q.to_, q.is_from_plug_,
+                   q.is_to_plug_);
+#endif
+
+    auto p = make_shared<K::FlipEdgePlugEvent>(e);
+    events_.insert(pos_, p);
+}

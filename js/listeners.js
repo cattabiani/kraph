@@ -24,15 +24,22 @@ document.addEventListener("mousedown", async function (event) {
     }
 
     // single selection
-    if (!event.ctrlKey) {
+    if (!event.ctrlKey && !isInSelection(event.target)) {
         cancelSelection();
     }
     select(event.target);
 
-    if (isNode(event.target) && event.altKey) {
-        fakeEdgeFromId = event.target.id;
-        updateFakeEdge(event.clientX, event.clientY, event.target);
+    if (isNode(event.target)) {
+        if (event.altKey) {
+            fakeEdgeFromId = event.target.id;
+            updateFakeEdge(event.clientX, event.clientY, event.target);
+            return;
+        } else {
+            startMoveNodeDivs(event.clientX, event.clientY);
+        }
     }
+
+
 });
 
 document.addEventListener('mousemove', function (event) {
@@ -52,6 +59,9 @@ document.addEventListener('mousemove', function (event) {
         updateFakeEdge(event.clientX, event.clientY, event.target);
         return;
     }
+
+    moveNodeDivs(event.clientX, event.clientY);
+
 });
 
 document.addEventListener('mouseup', async function (event) {
@@ -67,7 +77,10 @@ document.addEventListener('mouseup', async function (event) {
     if (fakeEdgeFromId) {
         newEdge(event.clientX, event.clientY, event.target);
         eraseFakeEdge();
+        return;
     }
+
+    commitMoveNodes();
 });
 
 
@@ -79,6 +92,14 @@ document.addEventListener('keydown', async function (event) {
         printGraphW.promise.then(function () {
             printGraphW();
         });
+    }
+
+    if (event.key === 'ArrowLeft') {
+        await flipEdgePlugs(true);
+    }
+
+    if (event.key === 'ArrowRight') {
+        await flipEdgePlugs(false);
     }
 
     // redo

@@ -20,7 +20,7 @@ function isModalModeOn() {
 }
 
 function isInSelection(node) {
-    for (const elem of selection) {
+    for (const elem of selectionNodes) {
         if (elem.id === node.id) {
             return true;
         }

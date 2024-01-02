@@ -108,4 +108,47 @@ namespace K {
             return os << base;
         }
     };
+
+    class MoveNodeEvent : public Event {
+    public:
+        MoveNodeEvent(const string& id, const int x, const int y,
+                      const bool is_triggered)
+            : id_(id), x_(x), y_(y), Event(is_triggered) {}
+        MoveNodeEvent(const MoveNodeEvent& e) = default;
+        MoveNodeEvent& operator=(const MoveNodeEvent&) = default;
+
+        string id_;
+        int x_;
+        int y_;
+
+        virtual void apply(K::Graph& gg) override;
+
+        virtual string name() const override { return "MoveNodeEvent"; }
+        friend std::ostream& operator<<(std::ostream& os,
+                                        const MoveNodeEvent& obj) {
+            const Event& base = obj;
+            return os << base;
+        }
+    };
+
+    class FlipEdgePlugEvent : public Event {
+    public:
+        FlipEdgePlugEvent(const string& id, bool is_from,
+                          const bool is_triggered)
+            : id_(id), is_from_(is_from), Event(is_triggered) {}
+        FlipEdgePlugEvent(const FlipEdgePlugEvent& e) = default;
+        FlipEdgePlugEvent& operator=(const FlipEdgePlugEvent&) = default;
+
+        string id_;
+        bool is_from_;
+
+        virtual void apply(K::Graph& gg) override;
+
+        virtual string name() const override { return "FlipEdgePlugEvent"; }
+        friend std::ostream& operator<<(std::ostream& os,
+                                        const FlipEdgePlugEvent& obj) {
+            const Event& base = obj;
+            return os << base;
+        }
+    };
 }

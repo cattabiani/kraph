@@ -1,9 +1,9 @@
 let debug = 1;
-let selection = new Set();
+let selectionNodes = new Set();
+let selectionEdges = new Set();
 let selectionBox = null;
-let startX, startY;
+let startX = null;
+let startY = null;
 let isDragging = false;
 let fakeEdgeFromId = null;
-// let newLL = null;
-// let invDiv = document.getElementById("invDiv");
-// let edges = new Map();
+let connectedEdges = [];

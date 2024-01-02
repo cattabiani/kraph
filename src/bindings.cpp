@@ -40,17 +40,52 @@ void eraseEdge(const string& id, bool is_triggered) {
 eraseEdgeW(const client::String& id, bool is_triggered) {
     eraseEdge(std::string(id), is_triggered);
 }
-// void moveNode(const string& id, const int x, const int y, bool is_triggered)
-// {
-//     auto& gg = K::Graph::get_instance();
-//     auto p = make_shared<K::MoveNodeEvent>(id, x, y, is_triggered);
-//     cc.add_event(p);
-// }
-// [[cheerp::jsexport]] [[cheerp::genericjs]] void
-// moveNodeW(const client::String& id, const int x, const int y,
-//           bool is_triggered) {
-//     moveNode(std::string(id), x, y, is_triggered);
-// }
+
+unordered_set<string> getConnectedEdges(const vector<string>& v) {
+    auto& gg = K::Graph::get_instance();
+    return gg.get_connected_edges(v);
+}
+
+void moveNode(const string& id, const int x, const int y, bool is_triggered) {
+    auto& gg = K::Graph::get_instance();
+    auto p = make_shared<K::MoveNodeEvent>(id, x, y, is_triggered);
+    gg.add_event(p);
+}
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] void
+moveNodeW(const client::String& id, const int x, const int y,
+          bool is_triggered) {
+    moveNode(std::string(id), x, y, is_triggered);
+}
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] client::Array*
+getConnectedEdgesW(client::Array& a) {
+    vector<string> v;
+    v.reserve(a.get_length());
+    for (size_t i = 0; i < a.get_length(); ++i) {
+        auto* p = static_cast<client::String*>(a[i]);
+        v.push_back(string(*p));
+    }
+
+    auto s = getConnectedEdges(v);
+    auto ans = new client::Array;
+    for (const auto& i : s) {
+        ans->push(new client::String(i.c_str()));
+    }
+    return ans;
+}
+
+void flipEdgePlug(const string& id, bool is_from, bool is_triggered) {
+    auto& gg = K::Graph::get_instance();
+    auto p = make_shared<K::FlipEdgePlugEvent>(id, is_from, is_triggered);
+    gg.add_event(p);
+}
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] void
+flipEdgePlugW(const client::String& id, const bool is_from, bool is_triggered) {
+    flipEdgePlug(std::string(id), is_from, is_triggered);
+}
+
 // void updateDataNode(const string& id, const string& label, const string&
 // info) {
 //     auto& gg = K::Graph::get_instance();

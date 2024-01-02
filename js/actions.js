@@ -23,36 +23,31 @@ function updateNodeJ(id, label, x, y) {
 
 function cancelSelection() {
     debugLog("cancelSelection");
-    selection.forEach(elem => {
-        if (isNode(elem)) {
-            elem.classList.remove('node-selected');
-        }
-        if (isEdge(elem)) {
-            elem.classList.remove('edge-label-selected');
-        }
+    selectionNodes.forEach(elem => {
+        elem.classList.remove('node-selected');
     });
-    selection.clear();
+    selectionNodes.clear();
+    selectionEdges.forEach(elem => {
+        elem.classList.remove('edge-label-selected');
+    });
+    selectionEdges.clear();
 }
 
 async function eraseSelection() {
     debugLog("eraseSelection");
-    let l = selection.size - 1;
+    let l = selectionEdges.size - 1;
     let idx = 0;
-    selection.forEach(elem => {
-        if (isEdge(elem)) {
-            eraseEdgeW.promise.then(function () {
-                eraseEdgeW(elem.id.split('-')[0], !(idx === l));
-                idx++;
-            });
-        }
+    selectionEdges.forEach(elem => {
+        eraseEdgeW.promise.then(function () {
+            eraseEdgeW(elem.id.split('-')[0], !(idx === l));
+            idx++;
+        });
     });
-    selection.forEach(elem => {
-        if (isNode(elem)) {
-            eraseNodeW.promise.then(function () {
-                eraseNodeW(elem.id, !(idx === l));
-                idx++;
-            });
-        }
+    selectionNodes.forEach(elem => {
+        eraseNodeW.promise.then(function () {
+            eraseNodeW(elem.id, !(idx === l));
+            idx++;
+        });
     });
     cancelSelection();
 }
@@ -63,12 +58,14 @@ function select(elem) {
     debugLog("select " + elem.id);
     if (isNode(elem)) {
         elem.classList.add('node-selected');
+        selectionNodes.add(elem);
     }
 
     if (isEdge(elem)) {
         elem.classList.add('edge-label-selected');
+        selectionEdges.add(elem);
     }
-    selection.add(elem);
+
 }
 
 
@@ -150,6 +147,7 @@ function updateInvDiv(x, y, isInvisible) {
     invDiv.style.top = y + 'px';
 }
 
+
 function updateEdgeJ(id, label, fromId, toId, isFromPlug, isToPlug) {
     debugLog("updateEdgeJ " + id + " from " + fromId + " to " + toId);
     let from = document.getElementById(fromId);
@@ -164,8 +162,24 @@ function updateEdgeJ(id, label, fromId, toId, isFromPlug, isToPlug) {
     }
     let pp = getConnectingLineExrtemes(from, to);
     let midPoint = pp.from.add(pp.to, 1.0).multiply(0.5);
-    updateEdgeLine(id, pp.from, pp.to, isFromPlug, isToPlug);
+    updateEdgeLine(id, pp.from, pp.to, fromId, toId, isFromPlug, isToPlug);
     updateEdgeLabel(id, label, midPoint);
+}
+
+function moveEdgeDiv(id) {
+    let d = getEdgeLineData(id);
+    let from = document.getElementById(d.fromId);
+    let to = document.getElementById(d.toId);
+    let pp = getConnectingLineExrtemes(from, to);
+    let midPoint = pp.from.add(pp.to, 1.0).multiply(0.5);
+    setEdgeLinePos(d.line, pp.from, pp.to);
+    setEdgeLabelPos(d.text, midPoint);
+}
+
+function updateConnectedEdges() {
+    connectedEdges.forEach(eid => {
+        moveEdgeDiv(eid);
+    });
 }
 
 function eraseEdgeJ(id) {
@@ -186,6 +200,56 @@ function eraseFakeEdge() {
     eraseId("fakeEdge-line");
     eraseId("fakeEdge-label");
     updateInvDiv(0, 0, true);
+}
 
+
+function startMoveNodeDivs(x, y) {
+    startX = x;
+    startY = y;
+    // connectedEdges = getConnectedEdgesW(Array.from(selectionNodes).map(div => div.id));
+}
+
+function moveNodeDivs(x, y) {
+
+    let dx = x - startX;
+    let dy = y - startY;
+
+    selectionNodes.forEach(div => {
+        div.style.left = (parseInt(div.style.left, 10) + dx) + 'px';
+        div.style.top = (parseInt(div.style.top, 10) + dy) + 'px';
+    });
+
+    startX = x;
+    startY = y;
+
+    updateConnectedEdges();
+}
+
+async function commitMoveNodes() {
+    moveNodeW.promise.then(function () {
+        let l = selectionNodes.size - 1;
+        let idx = 0;
+        selectionNodes.forEach(elem => {
+            let x = parseInt(elem.style.left, 10);
+            let y = parseInt(elem.style.top, 10);
+            moveNodeW(elem.id, x, y, !(idx === l));
+            idx++;
+        });
+        startX = null;
+        startY = null;
+        connectedEdges = [];
+    });
+}
+
+async function flipEdgePlugs(isFrom) {
+    flipEdgePlugW.promise.then(function () {
+        let l = selectionEdges.size - 1;
+        let idx = 0;
+        selectionEdges.forEach(elem => {
+            console.log(elem.id.split('-')[0]);
+            flipEdgePlugW(elem.id.split('-')[0], isFrom, !(idx === l));
+        });
+        ++idx;
+    });
 }
 

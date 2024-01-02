@@ -23,9 +23,9 @@ class Point {
 
     resizeSvg(svg) {
         let svgWidth = svg.getAttribute("width");
-        svg.setAttribute("width", Math.max(svgWidth, this.x + 10));
+        svg.setAttribute("width", Math.max(svgWidth, this.x + 30));
         let svgHeight = svg.getAttribute("height");
-        svg.setAttribute("height", Math.max(svgHeight, this.y + 10));
+        svg.setAttribute("height", Math.max(svgHeight, this.y + 30));
     }
 
     draw() {
@@ -41,27 +41,45 @@ class Point {
 
 }
 
+function getEdgeLineData(id) {
+    let line = document.getElementById(id + "-line");
+    let text = document.getElementById(id + "-label");
+    let fromId = line.getAttribute("fromId");
+    let toId = line.getAttribute("toId");
+    return { fromId: fromId, toId: toId, line: line, text: text };
+}
 
-
-function updateEdgeLine(id, from, to, isFromPlug, isToPlug) {
+function setEdgeLinePos(line, from, to) {
     let svg = document.getElementById('svgContainer');
     from.resizeSvg(svg);
     to.resizeSvg(svg);
+    line.setAttribute("x1", from.x);
+    line.setAttribute("y1", from.y);
+    line.setAttribute("x2", to.x);
+    line.setAttribute("y2", to.y);
+}
+
+function updateEdgeLine(id, from, to, fromId, toId, isFromPlug, isToPlug) {
     var line = document.getElementById(id + "-line");
     if (!line) {
         line = document.createElementNS("http://www.w3.org/2000/svg", "line");
         line.classList.add("edge-line");
         line.setAttribute("id", id + "-line");
+        line.setAttribute("fromId", fromId);
+        line.setAttribute("toId", toId);
+        let svg = document.getElementById('svgContainer');
         svg.appendChild(line);
     }
 
-    line.setAttribute("marker-end", isToPlug ? "url(#arrow)" : "none");
-    line.setAttribute("marker-start", isFromPlug ? "url(#arrow)" : "none");
+    line.setAttribute("marker-end", isToPlug ? "url(#arrowEnd)" : "none");
+    line.setAttribute("marker-start", isFromPlug ? "url(#arrowStart)" : "none");
 
-    line.setAttribute("x1", from.x);
-    line.setAttribute("y1", from.y);
-    line.setAttribute("x2", to.x);
-    line.setAttribute("y2", to.y);
+    setEdgeLinePos(line, from, to);
+}
+
+function setEdgeLabelPos(text, pos) {
+    text.setAttribute("x", pos.x);
+    text.setAttribute("y", pos.y - 10); // Adjust Y position to be above the line    
 }
 
 function updateEdgeLabel(id, label, pos) {
@@ -76,9 +94,11 @@ function updateEdgeLabel(id, label, pos) {
     }
 
     text.textContent = label;
-    text.setAttribute("x", pos.x);
-    text.setAttribute("y", pos.y - 10); // Adjust Y position to be above the line
+    setEdgeLabelPos(text, pos);
 }
+
+
+
 
 
 
