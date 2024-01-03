@@ -116,6 +116,7 @@ updateNodeDataW(const client::String& id, const client::String& label,
 void updateEdgeData(const string& id, const string& label, const string& info,
                     bool is_triggered) {
     auto& gg = K::Graph::get_instance();
+    cout << "BBB\n";
     auto p = make_shared<K::UpdateEdgeDataEvent>(id, label, info, is_triggered);
     gg.add_event(p);
 }
@@ -123,6 +124,7 @@ void updateEdgeData(const string& id, const string& label, const string& info,
 [[cheerp::jsexport]] [[cheerp::genericjs]] void
 updateEdgeDataW(const client::String& id, const client::String& label,
                 const client::String& info, bool is_triggered) {
+
     updateEdgeData(std::string(id), std::string(label), std::string(info),
                    is_triggered);
 }

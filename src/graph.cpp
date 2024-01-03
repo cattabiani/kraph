@@ -237,6 +237,8 @@ void K::Graph::update_edge_data(K::UpdateEdgeDataEvent& e) {
         return;
     }
 
+    cout << "AAA " << e << endl;
+
     auto& q = it->second;
 
     swap(e.label_, q.label_);

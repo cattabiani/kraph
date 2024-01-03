@@ -263,6 +263,9 @@ function fillModalAndOpenJ(id, label, info, isNode) {
     modal.innerHTML = '';
 
     // Set the sourceId attribute
+    modalSourceId = id;
+    isModalForNode = isNode;
+
     modal.setAttribute('sourceId', id);
     modal.setAttribute('isNode', isNode);
 
@@ -306,25 +309,27 @@ async function openModal(elem) {
 }
 
 async function closeModal() {
-    debugLog("deactivateModal");
+    debugLog("closeModal");
     let modal = document.getElementById('modal');
-    let isModalForNode = modal.getAttribute('isNode');
-    let id = modal.getAttribute('sourceId');
 
     let label = modal.querySelector("#label").value;
     let info = modal.querySelector("#info").value;
 
     if (isModalForNode) {
         updateNodeDataW.promise.then(function () {
-            updateNodeDataW(id, label, info, false);
+            updateNodeDataW(modalSourceId, label, info, false);
+            modal.innerHTML = '';
+            modal.style.display = 'none';
+            modalSourceId = null;
+            isModalForNode = null;
         });
     } else {
         updateEdgeDataW.promise.then(function () {
-            updateEdgeDataW(id, label, info, false);
+            updateEdgeDataW(modalSourceId, label, info, false);
+            modal.innerHTML = '';
+            modal.style.display = 'none';
+            modalSourceId = null;
+            isModalForNode = null;
         });
     }
-
-    // Clear existing content in the modal
-    modal.innerHTML = '';
-    modal.style.display = 'none';
 }

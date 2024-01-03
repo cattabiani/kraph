@@ -18,7 +18,12 @@ document.addEventListener("dblclick", async function (event) {
 document.addEventListener("mousedown", async function (event) {
     debugLog("eventTarget: " + event.target + ' ' + event.target.id);
     isDragging = true;
-    if (isModalModeOn()) return;
+    if (isModalModeOn()) {
+        if (!isModal(event.target)) {
+            await closeModal();
+        }
+        return;
+    }
 
 
 
@@ -75,12 +80,7 @@ document.addEventListener('mousemove', function (event) {
 
 document.addEventListener('mouseup', async function (event) {
     isDragging = false;
-    if (isModalModeOn()) {
-        if (!isModal(event.target)) {
-            await closeModal();
-        }
-        return;
-    }
+    if (isModalModeOn()) return;
 
     // selection box
     if (selectionBox) {
@@ -99,15 +99,10 @@ document.addEventListener('mouseup', async function (event) {
 
 
 document.addEventListener('keydown', async function (event) {
-    // print graph
-
-    if (!isModalModeOn() && event.key === 'Enter') {
-
-    }
-
 
     if (isModalModeOn() && event.key === 'Escape') {
         await closeModal();
+        return;
     }
 
     if (event.key === 'g') {
