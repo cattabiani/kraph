@@ -6,6 +6,20 @@
 #include "bindings.hpp"
 #endif
 
+#ifndef TESTS
+void update_node_edges(const unordered_set<string>& node_edges,
+                       const unordered_map<string, K::Edge>& edges) {
+    for (const auto& eid : node_edges) {
+        auto eit = edges.find(eid);
+        if (eit != edges.end()) {
+            auto& eq = eit->second;
+            K::updateEdgeJ(eq.id_, eq.label_, eq.from_, eq.to_,
+                           eq.is_from_plug_, eq.is_to_plug_);
+        }
+    }
+}
+#endif
+
 K::Graph& K::Graph::get_instance() {
     static K::Graph gg{};
     return gg;
@@ -176,15 +190,8 @@ void K::Graph::move_node(K::MoveNodeEvent& e) {
 
 #ifndef TESTS
     // emit js
-    for (const auto& eid : q.edges_) {
-        auto eit = edges_.find(eid);
-        if (eit != edges_.end()) {
-            auto& eq = eit->second;
-            K::updateEdgeJ(eq.id_, eq.label_, eq.from_, eq.to_,
-                           eq.is_from_plug_, eq.is_to_plug_);
-        }
-    }
     K::updateNodeJ(q.id_, q.label_, q.x_, q.y_);
+    update_node_edges(q.edges_, edges_);
 #endif
 
     auto p = make_shared<K::MoveNodeEvent>(e);
@@ -225,6 +232,7 @@ void K::Graph::update_node_data(K::UpdateNodeDataEvent& e) {
 
 #ifndef TESTS
     K::updateNodeJ(q.id_, q.label_, q.x_, q.y_);
+    update_node_edges(q.edges_, edges_);
 #endif
 
     auto p = make_shared<K::UpdateNodeDataEvent>(e);
