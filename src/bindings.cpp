@@ -86,7 +86,7 @@ flipEdgePlugW(const client::String& id, const bool is_from, bool is_triggered) {
     flipEdgePlug(std::string(id), is_from, is_triggered);
 }
 
-void editNode(const string& id) {
+void fillModalWithNode(const string& id) {
     auto& gg = K::Graph::get_instance();
     auto n = gg.get_node(id);
     if (n) {
@@ -95,11 +95,39 @@ void editNode(const string& id) {
 }
 
 [[cheerp::jsexport]] [[cheerp::genericjs]] void
-editNodeW(const client::String& id) {
-    editNode(std::string(id));
+fillModalWithNodeW(const client::String& id) {
+    fillModalWithNode(std::string(id));
 }
 
-void editEdge(const string& id) {
+void updateNodeData(const string& id, const string& label, const string& info,
+                    bool is_triggered) {
+    auto& gg = K::Graph::get_instance();
+    auto p = make_shared<K::UpdateNodeDataEvent>(id, label, info, is_triggered);
+    gg.add_event(p);
+}
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] void
+updateNodeDataW(const client::String& id, const client::String& label,
+                const client::String& info, bool is_triggered) {
+    updateNodeData(std::string(id), std::string(label), std::string(info),
+                   is_triggered);
+}
+
+void updateEdgeData(const string& id, const string& label, const string& info,
+                    bool is_triggered) {
+    auto& gg = K::Graph::get_instance();
+    auto p = make_shared<K::UpdateEdgeDataEvent>(id, label, info, is_triggered);
+    gg.add_event(p);
+}
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] void
+updateEdgeDataW(const client::String& id, const client::String& label,
+                const client::String& info, bool is_triggered) {
+    updateEdgeData(std::string(id), std::string(label), std::string(info),
+                   is_triggered);
+}
+
+void fillModalWithEdge(const string& id) {
     auto& gg = K::Graph::get_instance();
     auto n = gg.get_edge(id);
     if (n) {
@@ -108,8 +136,8 @@ void editEdge(const string& id) {
 }
 
 [[cheerp::jsexport]] [[cheerp::genericjs]] void
-editEdgeW(const client::String& id) {
-    editEdge(std::string(id));
+fillModalWithEdgeW(const client::String& id) {
+    fillModalWithEdge(std::string(id));
 }
 
 [[cheerp::jsexport]] [[cheerp::genericjs]] void printGraphW() {

@@ -35,7 +35,7 @@ function cancelSelection() {
 
 async function eraseSelection() {
     debugLog("eraseSelection");
-    let l = selectionEdges.size - 1;
+    let l = selectionEdges.size + selectionNodes.size - 1;
     let idx = 0;
     selectionEdges.forEach(elem => {
         eraseEdgeW.promise.then(function () {
@@ -271,6 +271,7 @@ function fillModalAndOpenJ(id, label, info, isNode) {
 
     // Create label input
     let labelInput = document.createElement('input');
+    labelInput.id = "label";
     labelInput.type = 'text';
     labelInput.className = 'input-label';
     labelInput.value = label;
@@ -278,6 +279,7 @@ function fillModalAndOpenJ(id, label, info, isNode) {
 
     // Create info textarea
     let infoTextarea = document.createElement('textarea');
+    infoTextarea.id = "info";
     infoTextarea.className = 'input-info';
     infoTextarea.value = info;
     form.appendChild(infoTextarea);
@@ -292,19 +294,37 @@ function fillModalAndOpenJ(id, label, info, isNode) {
 async function openModal(elem) {
     debugLog("activateModal " + elem.id);
     if (isNode(elem)) {
-        editNodeW.promise.then(function () {
-            editNodeW(elem.id);
+        fillModalWithNodeW.promise.then(function () {
+            fillModalWithNodeW(elem.id);
         });
     } else {
-        editEdgeW.promise.then(function () {
-            editEdgeW(elem.id.split('-')[0]);
+        fillModalWithEdgeW.promise.then(function () {
+            fillModalWithEdgeW(elem.id.split('-')[0]);
         });
     }
 
 }
 
-function closeModal() {
+async function closeModal() {
     debugLog("deactivateModal");
     let modal = document.getElementById('modal');
+    let isModalForNode = modal.getAttribute('isNode');
+    let id = modal.getAttribute('sourceId');
+
+    let label = modal.querySelector("#label").value;
+    let info = modal.querySelector("#info").value;
+
+    if (isModalForNode) {
+        updateNodeDataW.promise.then(function () {
+            updateNodeDataW(id, label, info, false);
+        });
+    } else {
+        updateEdgeDataW.promise.then(function () {
+            updateEdgeDataW(id, label, info, false);
+        });
+    }
+
+    // Clear existing content in the modal
+    modal.innerHTML = '';
     modal.style.display = 'none';
 }

@@ -16,6 +16,7 @@ class Point {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
+
     // Method to display point coordinates
     toString() {
         return `(${this.x}, ${this.y})`;

@@ -151,4 +151,48 @@ namespace K {
             return os << base;
         }
     };
+
+    class UpdateNodeDataEvent : public Event {
+    public:
+        UpdateNodeDataEvent(const string& id, const string& label,
+                            const string& info, const bool is_triggered)
+            : id_(id), label_(label), info_(info), Event(is_triggered) {}
+        UpdateNodeDataEvent(const UpdateNodeDataEvent& e) = default;
+        UpdateNodeDataEvent& operator=(const UpdateNodeDataEvent&) = default;
+
+        string id_;
+        string label_;
+        string info_;
+
+        virtual void apply(K::Graph& gg) override;
+
+        virtual string name() const override { return "UpdateNodeDataEvent"; }
+        friend std::ostream& operator<<(std::ostream& os,
+                                        const UpdateNodeDataEvent& obj) {
+            const Event& base = obj;
+            return os << base;
+        }
+    };
+
+    class UpdateEdgeDataEvent : public Event {
+    public:
+        UpdateEdgeDataEvent(const string& id, const string& label,
+                            const string& info, const bool is_triggered)
+            : id_(id), label_(label), info_(info), Event(is_triggered) {}
+        UpdateEdgeDataEvent(const UpdateEdgeDataEvent& e) = default;
+        UpdateEdgeDataEvent& operator=(const UpdateEdgeDataEvent&) = default;
+
+        string id_;
+        string label_;
+        string info_;
+
+        virtual void apply(K::Graph& gg) override;
+
+        virtual string name() const override { return "UpdateEdgeDataEvent"; }
+        friend std::ostream& operator<<(std::ostream& os,
+                                        const UpdateEdgeDataEvent& obj) {
+            const Event& base = obj;
+            return os << base;
+        }
+    };
 }

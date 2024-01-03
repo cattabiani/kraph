@@ -30,6 +30,8 @@ namespace K {
         void erase_edge(K::EraseEdgeEvent& e);
         void move_node(K::MoveNodeEvent& e);
         void flip_edge_plug(K::FlipEdgePlugEvent& e);
+        void update_node_data(K::UpdateNodeDataEvent& e);
+        void update_edge_data(K::UpdateEdgeDataEvent& e);
 
         void clear_nodes() { nodes_.clear(); }
         void clear_edges() { edges_.clear(); }

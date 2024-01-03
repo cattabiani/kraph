@@ -169,6 +169,8 @@ void K::Graph::move_node(K::MoveNodeEvent& e) {
 
     auto& q = it->second;
 
+    if (is_close(e.x_, q.x_, 5) || is_close(e.y_, q.y_, 5))
+        return;
     swap(e.x_, q.x_);
     swap(e.y_, q.y_);
 
@@ -207,5 +209,44 @@ void K::Graph::flip_edge_plug(K::FlipEdgePlugEvent& e) {
 #endif
 
     auto p = make_shared<K::FlipEdgePlugEvent>(e);
+    events_.insert(pos_, p);
+}
+
+void K::Graph::update_node_data(K::UpdateNodeDataEvent& e) {
+    auto it = nodes_.find(e.id_);
+    if (it == nodes_.end()) {
+        return;
+    }
+
+    auto& q = it->second;
+
+    swap(e.label_, q.label_);
+    swap(e.info_, q.info_);
+
+#ifndef TESTS
+    K::updateNodeJ(q.id_, q.label_, q.x_, q.y_);
+#endif
+
+    auto p = make_shared<K::UpdateNodeDataEvent>(e);
+    events_.insert(pos_, p);
+}
+
+void K::Graph::update_edge_data(K::UpdateEdgeDataEvent& e) {
+    auto it = edges_.find(e.id_);
+    if (it == edges_.end()) {
+        return;
+    }
+
+    auto& q = it->second;
+
+    swap(e.label_, q.label_);
+    swap(e.info_, q.info_);
+
+#ifndef TESTS
+    K::updateEdgeJ(q.id_, q.label_, q.from_, q.to_, q.is_from_plug_,
+                   q.is_to_plug_);
+#endif
+
+    auto p = make_shared<K::UpdateEdgeDataEvent>(e);
     events_.insert(pos_, p);
 }

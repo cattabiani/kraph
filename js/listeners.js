@@ -18,12 +18,9 @@ document.addEventListener("dblclick", async function (event) {
 document.addEventListener("mousedown", async function (event) {
     debugLog("eventTarget: " + event.target + ' ' + event.target.id);
     isDragging = true;
-    if (isModalModeOn()) {
-        if (!isModal(event.target)) {
-            closeModal();
-        }
-        return;
-    }
+    if (isModalModeOn()) return;
+
+
 
     // selection box
     if (isEmptySpace(event.target)) {
@@ -78,7 +75,12 @@ document.addEventListener('mousemove', function (event) {
 
 document.addEventListener('mouseup', async function (event) {
     isDragging = false;
-    if (isModalModeOn()) return;
+    if (isModalModeOn()) {
+        if (!isModal(event.target)) {
+            await closeModal();
+        }
+        return;
+    }
 
     // selection box
     if (selectionBox) {
@@ -97,43 +99,47 @@ document.addEventListener('mouseup', async function (event) {
 
 
 document.addEventListener('keydown', async function (event) {
-    if (isModalModeOn()) {
-        if (event.key === 'Escape') {
-            closeModal();
-        }
-        return;
-    }
     // print graph
+
+    if (!isModalModeOn() && event.key === 'Enter') {
+
+    }
+
+
+    if (isModalModeOn() && event.key === 'Escape') {
+        await closeModal();
+    }
+
     if (event.key === 'g') {
         printGraphW.promise.then(function () {
             printGraphW();
         });
     }
 
-    if (event.key === 'ArrowLeft') {
+    if (!isModalModeOn() && event.key === 'ArrowLeft') {
         await flipEdgePlugs(true);
     }
 
-    if (event.key === 'ArrowRight') {
+    if (!isModalModeOn() && event.key === 'ArrowRight') {
         await flipEdgePlugs(false);
     }
 
     // redo
-    if (event.ctrlKey && event.key === 'y') {
+    if (!isModalModeOn() && event.ctrlKey && event.key === 'y') {
         redoW.promise.then(function () {
             redoW();
         });
     }
 
     // undo
-    if (event.ctrlKey && event.key === 'z') {
+    if (!isModalModeOn() && event.ctrlKey && event.key === 'z') {
         undoW.promise.then(function () {
             undoW();
         });
     }
 
     // delete selection
-    if (event.key === 'Delete') {
+    if (!isModalModeOn() && event.key === 'Delete') {
         await eraseSelection();
     }
 

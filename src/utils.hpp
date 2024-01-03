@@ -40,3 +40,7 @@ std::ostream& operator<<(std::ostream& os, const Iterable& container) {
     os.put(']');
     return os;
 }
+
+template <class T> bool is_close(T x0, T x1, T v) {
+    return (x0 - v) <= x1 <= (x0 + v);
+}
