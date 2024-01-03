@@ -21,6 +21,10 @@ moveNodeW(const client::String& id, const int x, const int y,
 getConnectedEdgesW(client::Array& a);
 [[cheerp::jsexport]] [[cheerp::genericjs]] void
 flipEdgePlugW(const client::String& id, const bool is_from, bool is_triggered);
+[[cheerp::jsexport]] [[cheerp::genericjs]] void
+editNodeW(const client::String& id);
+[[cheerp::jsexport]] [[cheerp::genericjs]] void
+editEdgeW(const client::String& id);
 // [[cheerp::jsexport]] [[cheerp::genericjs]] void
 // updateDataNodeW(const client::String& id, const client::String& label,
 //                 const client::String& info);
@@ -37,6 +41,8 @@ namespace [[cheerp::genericjs]] client {
                      const String& fromId, const String& toId,
                      bool is_from_plug, bool is_to_plug);
     void eraseEdgeJ(const String& id);
+    void fillModalAndOpenJ(const String& id, const String& label,
+                           const String& info, bool is_node);
 }
 
 namespace [[cheerp::genericjs]] K {
@@ -51,5 +57,7 @@ namespace [[cheerp::genericjs]] K {
                      const string& fromId, const string& toId,
                      bool is_from_plug, bool is_to_plug);
     void eraseEdgeJ(const string& id);
+    void fillModalAndOpenJ(const string& id, const string& label,
+                           const string& info, bool is_node);
 
 }

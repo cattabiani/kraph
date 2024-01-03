@@ -22,11 +22,12 @@ body {
     border-radius: 8px;
     /* Rounded corners */
     box-sizing: border-box;
+
 }
 
-.modal .input-container {
+/* .modal .input-container {
     margin-bottom: 20px;
-}
+} */
 
 .modal label {
     display: block;
@@ -51,12 +52,14 @@ body {
     background-color: #e7eff6;
     /* Very light pastel blue background */
     box-sizing: border-box;
+    margin-bottom: 20px;
+    /* Adjust this value as needed */
 }
 
 .modal textarea {
     resize: vertical;
     /* Allow vertical resizing only */
-    height: 100px;
+    height: 600px;
     /* Initial height */
 }
 

@@ -86,6 +86,49 @@ flipEdgePlugW(const client::String& id, const bool is_from, bool is_triggered) {
     flipEdgePlug(std::string(id), is_from, is_triggered);
 }
 
+void editNode(const string& id) {
+    auto& gg = K::Graph::get_instance();
+    auto n = gg.get_node(id);
+    if (n) {
+        K::fillModalAndOpenJ(id, n->label_, n->info_, true);
+    }
+}
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] void
+editNodeW(const client::String& id) {
+    editNode(std::string(id));
+}
+
+void editEdge(const string& id) {
+    auto& gg = K::Graph::get_instance();
+    auto n = gg.get_edge(id);
+    if (n) {
+        K::fillModalAndOpenJ(id, n->label_, n->info_, false);
+    }
+}
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] void
+editEdgeW(const client::String& id) {
+    editEdge(std::string(id));
+}
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] void printGraphW() {
+    auto& gg = K::Graph::get_instance();
+    stringstream ss;
+    ss << gg << endl;
+    client::console.log(client::String(ss.str().c_str()));
+}
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] void redoW() {
+    auto& gg = K::Graph::get_instance();
+    gg.redo();
+}
+
+[[cheerp::jsexport]] [[cheerp::genericjs]] void undoW() {
+    auto& gg = K::Graph::get_instance();
+    gg.undo();
+}
+
 // void updateDataNode(const string& id, const string& label, const string&
 // info) {
 //     auto& gg = K::Graph::get_instance();
@@ -120,19 +163,11 @@ flipEdgePlugW(const client::String& id, const bool is_from, bool is_triggered) {
     client::eraseEdgeJ(K::str2Str(id));
 }
 
-[[cheerp::jsexport]] [[cheerp::genericjs]] void printGraphW() {
-    auto& gg = K::Graph::get_instance();
-    stringstream ss;
-    ss << gg << endl;
-    client::console.log(client::String(ss.str().c_str()));
-}
+[[cheerp::genericjs]] void K::fillModalAndOpenJ(const string& id,
+                                                const string& label,
+                                                const string& info,
+                                                bool is_node) {
 
-[[cheerp::jsexport]] [[cheerp::genericjs]] void redoW() {
-    auto& gg = K::Graph::get_instance();
-    gg.redo();
-}
-
-[[cheerp::jsexport]] [[cheerp::genericjs]] void undoW() {
-    auto& gg = K::Graph::get_instance();
-    gg.undo();
+    client::fillModalAndOpenJ(K::str2Str(id), K::str2Str(label),
+                              K::str2Str(info), is_node);
 }

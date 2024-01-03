@@ -187,6 +187,8 @@ function eraseEdgeJ(id) {
     eraseId(id + "-label");
 }
 
+
+
 function updateFakeEdge(x, y, tgt) {
     let isTgtNode = isNode(tgt);
     updateInvDiv(x, y, isTgtNode);
@@ -206,7 +208,7 @@ function eraseFakeEdge() {
 function startMoveNodeDivs(x, y) {
     startX = x;
     startY = y;
-    // connectedEdges = getConnectedEdgesW(Array.from(selectionNodes).map(div => div.id));
+    connectedEdges = getConnectedEdgesW(Array.from(selectionNodes).map(div => div.id));
 }
 
 function moveNodeDivs(x, y) {
@@ -253,3 +255,56 @@ async function flipEdgePlugs(isFrom) {
     });
 }
 
+function fillModalAndOpenJ(id, label, info, isNode) {
+    debugLog("fillModalAndOpenJ");
+    let modal = document.getElementById('modal');
+
+    // Clear existing content in the modal
+    modal.innerHTML = '';
+
+    // Set the sourceId attribute
+    modal.setAttribute('sourceId', id);
+    modal.setAttribute('isNode', isNode);
+
+    // Create a form
+    let form = document.createElement('form');
+
+    // Create label input
+    let labelInput = document.createElement('input');
+    labelInput.type = 'text';
+    labelInput.className = 'input-label';
+    labelInput.value = label;
+    form.appendChild(labelInput);
+
+    // Create info textarea
+    let infoTextarea = document.createElement('textarea');
+    infoTextarea.className = 'input-info';
+    infoTextarea.value = info;
+    form.appendChild(infoTextarea);
+
+    // Append form to modal
+    modal.appendChild(form);
+
+    // Display the modal
+    modal.style.display = 'block';
+}
+
+async function openModal(elem) {
+    debugLog("activateModal " + elem.id);
+    if (isNode(elem)) {
+        editNodeW.promise.then(function () {
+            editNodeW(elem.id);
+        });
+    } else {
+        editEdgeW.promise.then(function () {
+            editEdgeW(elem.id.split('-')[0]);
+        });
+    }
+
+}
+
+function closeModal() {
+    debugLog("deactivateModal");
+    let modal = document.getElementById('modal');
+    modal.style.display = 'none';
+}

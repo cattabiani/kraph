@@ -1,9 +1,16 @@
 // new node
 document.addEventListener("dblclick", async function (event) {
     if (isModalModeOn()) return;
-    if (!isEmptySpace(event.target)) return;
 
-    await newNode(event.clientX, event.clientY, false);
+    if (isNode(event.target) || isEdge(event.target)) {
+        await openModal(event.target);
+    }
+
+
+    if (isEmptySpace(event.target)) {
+        await newNode(event.clientX, event.clientY, false);
+        return;
+    }
 });
 
 
@@ -11,7 +18,12 @@ document.addEventListener("dblclick", async function (event) {
 document.addEventListener("mousedown", async function (event) {
     debugLog("eventTarget: " + event.target + ' ' + event.target.id);
     isDragging = true;
-    if (isModalModeOn()) return;
+    if (isModalModeOn()) {
+        if (!isModal(event.target)) {
+            closeModal();
+        }
+        return;
+    }
 
     // selection box
     if (isEmptySpace(event.target)) {
@@ -85,8 +97,12 @@ document.addEventListener('mouseup', async function (event) {
 
 
 document.addEventListener('keydown', async function (event) {
-    if (isModalModeOn()) return;
-
+    if (isModalModeOn()) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+        return;
+    }
     // print graph
     if (event.key === 'g') {
         printGraphW.promise.then(function () {
@@ -120,4 +136,5 @@ document.addEventListener('keydown', async function (event) {
     if (event.key === 'Delete') {
         await eraseSelection();
     }
+
 });
