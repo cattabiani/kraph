@@ -22,7 +22,29 @@
         </defs>
         <!-- Other SVG elements can be added dynamically here -->
     </svg>
-    <div class="modal" id="modal"> </div>
+
+    <button id="infoButton">Info</button>
+    <div id="infoMenu" class="modal">
+        <!-- Static lines of text here -->
+        <p>How to use Kraph:</p>
+        <ul>
+            <li>double click on empty space: create a new node</li>
+            <li>double click on a node/edge: edit data of node/edge. Clicking out of the window saves the data </li>
+            <li>click on node/edge: selection</li>
+            <li>click on empty space + drag: selection</li>
+            <li>click on empty space: deselection</li>
+            <li>click on selected entity + drag: move</li>
+            <li>ctrl+click on selected entity + drag: create a new node, child of the previous one</li>
+            <li>left or right arrows when edges are selected: toggle plugs on and off </li>
+            <!-- Add more steps as needed -->
+        </ul>
+        <button id="saveButton">Save locally</button>
+        <button id="loadButton">Load locally</button>
+        <button id="downloadButton">Save to file (yaml)</button>
+        <button id="uploadButton">Load from file (yaml)</button>
+    </div>
+
+    <div class="modal" id="editDataForm"> </div>
     <div class="invDiv" id="invDiv"> </div>
 
     <script src="app.js"></script>

@@ -172,3 +172,39 @@ body {
     transition: fill 0.2s, font-size 0.2s, filter 0.2s;
     /* Smooth transition for changes */
 }
+
+button {
+    position: relative;
+    /* Changed to relative for general button styling */
+    padding: 3px 5px;
+    background-color: #5c5c5c;
+    /* Dark gray background */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    /* Soft shadow for depth */
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2e2e2e;
+    /* Slightly darker shade on hover */
+}
+
+#infoButton {
+    top: 10px;
+    left: 10px;
+}
+
+#infoMenu {
+    display: none;
+    /* Rest of the styles like .modal */
+}
+
+/* Style for close button inside the menu */
+#closeMenu {
+    /* Styling for close button */
+}

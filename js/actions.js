@@ -257,14 +257,14 @@ async function flipEdgePlugs(isFrom) {
 
 function fillModalAndOpenJ(id, label, info, isNode) {
     debugLog("fillModalAndOpenJ");
-    let modal = document.getElementById('modal');
+    let modal = document.getElementById('editDataForm');
 
     // Clear existing content in the modal
     modal.innerHTML = '';
 
     // Set the sourceId attribute
     modalSourceId = id;
-    isModalForNode = isNode;
+    isEditDataForNode = isNode;
 
     modal.setAttribute('sourceId', id);
     modal.setAttribute('isNode', isNode);
@@ -310,18 +310,18 @@ async function openModal(elem) {
 
 async function closeModal() {
     debugLog("closeModal");
-    let modal = document.getElementById('modal');
+    let modal = document.getElementById('editDataForm');
 
     let label = modal.querySelector("#label").value;
     let info = modal.querySelector("#info").value;
 
-    if (isModalForNode) {
+    if (isEditDataForNode) {
         updateNodeDataW.promise.then(function () {
             updateNodeDataW(modalSourceId, label, info, false);
             modal.innerHTML = '';
             modal.style.display = 'none';
             modalSourceId = null;
-            isModalForNode = null;
+            isEditDataForNode = null;
         });
     } else {
         updateEdgeDataW.promise.then(function () {
@@ -329,7 +329,7 @@ async function closeModal() {
             modal.innerHTML = '';
             modal.style.display = 'none';
             modalSourceId = null;
-            isModalForNode = null;
+            isEditDataForNode = null;
         });
     }
 }

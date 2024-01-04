@@ -1,6 +1,7 @@
 // new node
 document.addEventListener("dblclick", async function (event) {
-    if (isModalModeOn()) return;
+    if (isEditDataModeOn()) return;
+    if (isInfoMenuOn()) return;
 
     if (isNode(event.target) || isEdge(event.target)) {
         await openModal(event.target);
@@ -18,9 +19,15 @@ document.addEventListener("dblclick", async function (event) {
 document.addEventListener("mousedown", async function (event) {
     debugLog("eventTarget: " + event.target + ' ' + event.target.id);
     isDragging = true;
-    if (isModalModeOn()) {
-        if (!isModal(event.target)) {
+    if (isEditDataModeOn()) {
+        if (!isEditData(event.target)) {
             await closeModal();
+        }
+        return;
+    }
+    if (isInfoMenuOn()) {
+        if (!isInfoMenu(event.target)) {
+            document.getElementById('infoMenu').style.display = 'none';
         }
         return;
     }
@@ -57,7 +64,7 @@ document.addEventListener("mousedown", async function (event) {
 });
 
 document.addEventListener('mousemove', function (event) {
-    if (isModalModeOn()) return;
+    if (isEditDataModeOn()) return;
     if (!isDragging) return;
 
     // selection box
@@ -80,7 +87,7 @@ document.addEventListener('mousemove', function (event) {
 
 document.addEventListener('mouseup', async function (event) {
     isDragging = false;
-    if (isModalModeOn()) return;
+    if (isEditDataModeOn()) return;
 
     // selection box
     if (selectionBox) {
@@ -100,8 +107,13 @@ document.addEventListener('mouseup', async function (event) {
 
 document.addEventListener('keydown', async function (event) {
 
-    if (isModalModeOn() && event.key === 'Escape') {
+    if (isEditDataModeOn() && event.key === 'Escape') {
         await closeModal();
+        return;
+    }
+
+    if (isInfoMenuOn() && event.key === 'Escape') {
+        document.getElementById('infoMenu').style.display = 'none';
         return;
     }
 
@@ -111,31 +123,51 @@ document.addEventListener('keydown', async function (event) {
         });
     }
 
-    if (!isModalModeOn() && event.key === 'ArrowLeft') {
+    if (!isEditDataModeOn() && event.key === 'ArrowLeft') {
         await flipEdgePlugs(true);
     }
 
-    if (!isModalModeOn() && event.key === 'ArrowRight') {
+    if (!isEditDataModeOn() && event.key === 'ArrowRight') {
         await flipEdgePlugs(false);
     }
 
     // redo
-    if (!isModalModeOn() && event.ctrlKey && event.key === 'y') {
+    if (!isEditDataModeOn() && event.ctrlKey && event.key === 'y') {
         redoW.promise.then(function () {
             redoW();
         });
     }
 
     // undo
-    if (!isModalModeOn() && event.ctrlKey && event.key === 'z') {
+    if (!isEditDataModeOn() && event.ctrlKey && event.key === 'z') {
         undoW.promise.then(function () {
             undoW();
         });
     }
 
     // delete selection
-    if (!isModalModeOn() && event.key === 'Delete') {
+    if (!isEditDataModeOn() && event.key === 'Delete') {
         await eraseSelection();
     }
 
+});
+
+document.getElementById('infoButton').addEventListener('click', function () {
+    document.getElementById('infoMenu').style.display = 'block';
+});
+
+document.getElementById('saveButton').addEventListener('click', function () {
+    console.log("TODO");
+});
+
+document.getElementById('loadButton').addEventListener('click', function () {
+    console.log("TODO");
+});
+
+document.getElementById('downloadButton').addEventListener('click', function () {
+    console.log("TODO");
+});
+
+document.getElementById('uploadButton').addEventListener('click', function () {
+    console.log("TODO");
 });

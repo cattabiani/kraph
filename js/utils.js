@@ -1,5 +1,9 @@
-function isModal(elem) {
-    return document.getElementById('modal').contains(elem);
+function isEditData(elem) {
+    return document.getElementById('editDataForm').contains(elem);
+}
+
+function isInfoMenu(elem) {
+    return document.getElementById('infoMenu').contains(elem);
 }
 
 function isNode(elem) {
@@ -11,11 +15,16 @@ function isEdge(elem) {
 }
 
 function isEmptySpace(elem) {
-    return !isNode(elem) && !isModal(elem) && !isEdge(elem);
+    return !isNode(elem) && !isEditData(elem) && !isEdge(elem) && !isInfoMenu(elem);
 }
 
-function isModalModeOn() {
-    let modal = document.getElementById('modal');
+function isEditDataModeOn() {
+    let modal = document.getElementById('editDataForm');
+    return modal.style.display === 'block';
+}
+
+function isInfoMenuOn() {
+    let modal = document.getElementById('infoMenu');
     return modal.style.display === 'block';
 }
 
