@@ -44,7 +44,7 @@ document.addEventListener("mousedown", async function (event) {
     select(event.target);
 
     if (isNode(event.target)) {
-        if (event.altKey) {
+        if (event.ctrlKey) {
             fakeEdgeFromId = event.target.id;
             updateFakeEdge(event.clientX, event.clientY, event.target);
             return;
