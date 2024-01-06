@@ -18,7 +18,7 @@ if(TESTS)
 else()
     # Configuration for the main app
     set(CMAKE_CXX_COMPILER "/opt/cheerp/bin/clang++")
-    set(CMAKE_CXX_FLAGS "-target cheerp-wasm -O2")
+    set(CMAKE_CXX_FLAGS "-target cheerp-wasm -O2 -cheerp-no-lto")
 
     # Include directories for the main app
     include_directories("src")

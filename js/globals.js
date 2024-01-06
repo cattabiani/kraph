@@ -7,5 +7,5 @@ let startY = null;
 let isDragging = false;
 let fakeEdgeFromId = null;
 let connectedEdges = [];
-let isModalForNode = null;
+let isEditDataForNode = null;
 let modalSourceId = null;

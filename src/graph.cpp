@@ -164,7 +164,7 @@ void K::Graph::erase_edge(K::EraseEdgeEvent& e) {
 }
 
 unordered_set<string>
-K::Graph::get_connected_edges(const vector<string>& v) const {
+K::Graph::get_connected_edges(const std::vector<std::string>& v) const {
     unordered_set<string> ans;
     for (const auto& i : v) {
         auto it = nodes_.find(i);
@@ -206,7 +206,7 @@ void K::Graph::flip_edge_plug(K::FlipEdgePlugEvent& e) {
 
     auto& q = it->second;
 
-    auto& plug = e.is_from_ ? q.is_from_plug_ : q.is_to_plug_;
+    auto& plug = e.is_from_ ? it->second.is_from_plug_ : it->second.is_to_plug_;
     plug = !plug;
 
 #ifndef TESTS

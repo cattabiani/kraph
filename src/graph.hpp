@@ -4,6 +4,7 @@
 #include <memory>
 #include <sstream>
 #include <unordered_map>
+#include <vector>
 
 #include "edge.hpp"
 #include "events.hpp"
@@ -51,7 +52,7 @@ namespace K {
         const K::Node* get_node(const string& id) const;
         const K::Edge* get_edge(const string& id) const;
         unordered_set<string>
-        get_connected_edges(const vector<string>& v) const;
+        get_connected_edges(const std::vector<string>& v) const;
 
         size_t size_nodes() const { return nodes_.size(); }
         size_t size_edges() const { return edges_.size(); }

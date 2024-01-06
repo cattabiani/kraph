@@ -15,11 +15,11 @@ namespace K {
              const int x, const int y)
             : id_(id), label_(label), info_(info), x_(x), y_(y) {}
 
-        string id_;
-        string label_;
-        string info_;
-        int x_;
-        int y_;
+        string id_ = "";
+        string label_ = "New Node";
+        string info_ = "";
+        int x_ = 0;
+        int y_ = 0;
         unordered_set<string> edges_;
 
         friend std::ostream& operator<<(std::ostream& os, const Node& obj) {

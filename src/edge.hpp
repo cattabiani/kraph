@@ -26,12 +26,12 @@ namespace K {
             return os;
         }
 
-        string id_;
-        string label_;
-        string info_;
-        string from_;
-        string to_;
-        bool is_from_plug_;
-        bool is_to_plug_;
+        string id_ = "";
+        string label_ = "New Edge";
+        string info_ = "";
+        string from_ = "";
+        string to_ = "";
+        bool is_from_plug_ = false;
+        bool is_to_plug_ = true;
     };
 }

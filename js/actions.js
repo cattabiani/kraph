@@ -129,6 +129,7 @@ async function newEdge(x, y, tgt) {
         toId = tgt.id;
     }
 
+    debugLog("newEdgeW " + fakeEdgeFromId + ' ' + toId + ' ' + false);
     await newEdgeW(fakeEdgeFromId, toId, false);
     fakeEdgeFromId = null;
 }
@@ -149,7 +150,7 @@ function updateInvDiv(x, y, isInvisible) {
 
 
 function updateEdgeJ(id, label, fromId, toId, isFromPlug, isToPlug) {
-    debugLog("updateEdgeJ " + id + " from " + fromId + " to " + toId);
+    debugLog("updateEdgeJ" + id + fromId + toId + isFromPlug + isToPlug);
     let from = document.getElementById(fromId);
     if (!from) {
         debugLog("From div " + fromId + " is missing!");
@@ -248,7 +249,6 @@ async function flipEdgePlugs(isFrom) {
         let l = selectionEdges.size - 1;
         let idx = 0;
         selectionEdges.forEach(elem => {
-            console.log(elem.id.split('-')[0]);
             flipEdgePlugW(elem.id.split('-')[0], isFrom, !(idx === l));
         });
         ++idx;
@@ -316,20 +316,12 @@ async function closeModal() {
     let info = modal.querySelector("#info").value;
 
     if (isEditDataForNode) {
-        updateNodeDataW.promise.then(function () {
-            updateNodeDataW(modalSourceId, label, info, false);
-            modal.innerHTML = '';
-            modal.style.display = 'none';
-            modalSourceId = null;
-            isEditDataForNode = null;
-        });
+        await updateNodeDataW(modalSourceId, label, info, false);
     } else {
-        updateEdgeDataW.promise.then(function () {
-            updateEdgeDataW(modalSourceId, label, info, false);
-            modal.innerHTML = '';
-            modal.style.display = 'none';
-            modalSourceId = null;
-            isEditDataForNode = null;
-        });
+        await updateEdgeDataW(modalSourceId, label, info, false);
     }
+    // modal.innerHTML = '';
+    modal.style.display = 'none';
+    modalSourceId = null;
+    isEditDataForNode = null;
 }

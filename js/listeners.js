@@ -31,7 +31,7 @@ document.addEventListener("mousedown", async function (event) {
         }
         return;
     }
-
+    event.preventDefault();
 
 
     // selection box
@@ -96,7 +96,7 @@ document.addEventListener('mouseup', async function (event) {
     }
 
     if (fakeEdgeFromId) {
-        newEdge(event.clientX, event.clientY, event.target);
+        await newEdge(event.clientX, event.clientY, event.target);
         eraseFakeEdge();
         return;
     }
@@ -106,7 +106,6 @@ document.addEventListener('mouseup', async function (event) {
 
 
 document.addEventListener('keydown', async function (event) {
-
     if (isEditDataModeOn() && event.key === 'Escape') {
         await closeModal();
         return;

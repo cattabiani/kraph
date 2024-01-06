@@ -69,7 +69,7 @@ namespace K {
     public:
         NewEdgeEvent(const string& from, const string& to,
                      const bool is_triggered)
-            : Event(is_triggered) {
+            : e_(), Event(is_triggered) {
             e_.from_ = from;
             e_.to_ = to;
         }
