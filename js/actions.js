@@ -255,7 +255,25 @@ async function flipEdgePlugs(isFrom) {
     });
 }
 
-function fillModalAndOpenJ(id, label, info, isNode) {
+async function closeModal() {
+    debugLog("closeModal");
+    let modal = document.getElementById('editDataForm');
+
+    let label = modal.querySelector("#label").value;
+    let info = modal.querySelector("#info").value;
+
+    if (isEditDataForNode) {
+        await updateNodeDataW(modalSourceId, label, info, false);
+    } else {
+        await updateEdgeDataW(modalSourceId, label, info, false);
+    }
+    // modal.innerHTML = '';
+    modal.style.display = 'none';
+    modalSourceId = null;
+    isEditDataForNode = null;
+}
+
+async function fillModalAndOpenJ(id, label, info, isNode) {
     debugLog("fillModalAndOpenJ");
     let modal = document.getElementById('editDataForm');
 
@@ -279,6 +297,13 @@ function fillModalAndOpenJ(id, label, info, isNode) {
     labelInput.className = 'input-label';
     labelInput.value = label;
     form.appendChild(labelInput);
+
+    labelInput.addEventListener("keydown", async function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            await closeModal();
+        }
+    });
 
     // Create info textarea
     let infoTextarea = document.createElement('textarea');
@@ -308,20 +333,4 @@ async function openModal(elem) {
 
 }
 
-async function closeModal() {
-    debugLog("closeModal");
-    let modal = document.getElementById('editDataForm');
 
-    let label = modal.querySelector("#label").value;
-    let info = modal.querySelector("#info").value;
-
-    if (isEditDataForNode) {
-        await updateNodeDataW(modalSourceId, label, info, false);
-    } else {
-        await updateEdgeDataW(modalSourceId, label, info, false);
-    }
-    // modal.innerHTML = '';
-    modal.style.display = 'none';
-    modalSourceId = null;
-    isEditDataForNode = null;
-}
