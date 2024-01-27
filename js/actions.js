@@ -304,6 +304,7 @@ async function fillModalAndOpenJ(id, label, info, isNode) {
             await closeModal();
         }
     });
+    
 
     // Create info textarea
     let infoTextarea = document.createElement('textarea');
