@@ -170,8 +170,13 @@ document.getElementById('downloadButton').addEventListener('click', function () 
     getGraphJsonW.promise.then(function () {
         let gg = getGraphJsonW();
         gg = JSON.parse(gg);
+        if ("events_" in gg) {
+            delete gg.events_;
+        }
+        if ("pos_" in gg) {
+            delete gg.pos_;
+        }
         gg = JSON.stringify(gg, null, 4);
-        console.log(gg);
         const blob = new Blob([gg], { type: 'application/json' });
 
         const a = document.createElement('a');
