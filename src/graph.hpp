@@ -74,29 +74,25 @@ namespace K {
 
     public:
         friend std::ostream& operator<<(std::ostream& os, const Graph& obj) {
-            using pn = std::pair<string, unordered_map<string, Node>&>;
-            using pe = std::pair<string, unordered_map<string, Edge>&>;
+            using pi = std::pair<string, int>;
             constexpr auto sep = ", ";
+            int pos = std::distance<
+                      std::list<std::shared_ptr<Event>>::const_iterator>(
+                      obj.pos_, obj.events_.end());
             os << '{'
             << string("nodes_") << ": " << obj.nodes_ << sep
-            << string("edges_") << ": " << obj.edges_
-            << '}';
-            // os << "Graph\nNodes:\n"
-            //    << obj.nodes_ << "\nEdges:\n"
-            //    << obj.edges_ << '\n'
-            //    << "Chronology, (" << obj.events_.size() << ") pos_: end - "
-            //    << std::distance<
-            //           std::list<std::shared_ptr<Event>>::const_iterator>(
-            //           obj.pos_, obj.events_.end())
-            //    << '\n';
-            // const auto& container = obj.events_;
-            // for (auto it = container.begin(); it != container.end();
-            //      /* no increment here */) {
-            //     os << *(*it);
-            //     if (++it != container.end()) {
-            //         os << '\n';
-            //     }
-            // }
+            << string("edges_") << ": " << obj.edges_ << sep
+            << string("events_") << ": [";
+
+            const auto& container = obj.events_;
+            for (auto it = container.begin(); it != container.end(); ++it) {
+                os << *(*it);
+                if (next(it) != container.end()) {
+                    os << sep;
+                }
+            }
+            os << ']' << sep << pi{"pos_", -pos} << '}';
+
             return os;
         }
     };

@@ -187,16 +187,15 @@ button {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     /* Soft shadow for depth */
     transition: background-color 0.3s ease;
+    display: block;
+    left: 10px;
+    top: 10px;
+    margin-bottom: 10px;
 }
 
 button:hover {
     background-color: #2e2e2e;
     /* Slightly darker shade on hover */
-}
-
-#infoButton {
-    top: 10px;
-    left: 10px;
 }
 
 #infoMenu {

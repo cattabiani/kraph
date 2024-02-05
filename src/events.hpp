@@ -17,8 +17,14 @@ namespace K {
 
         virtual string name() const { return "Event"; }
         friend std::ostream& operator<<(std::ostream& os, const Event& obj) {
-            return os << obj.name() << ": "
-                      << " t: " << obj.is_triggered_;
+            using ps = std::pair<string, string>;
+            using pi = std::pair<string, int>;
+            constexpr auto sep = ", ";
+            os << '{'
+            << ps{"event_type", obj.name()} << sep
+            << pi{"is_triggered_", obj.is_triggered_} 
+            << '}';
+            return os;
         }
     };
 

@@ -119,7 +119,8 @@ document.addEventListener('keydown', async function (event) {
     if (event.key === 'g') {
         getGraphJsonW.promise.then(function () {
             let gg = getGraphJsonW();
-            gg = JSON.stringify(JSON.parse(gg), null, 4);
+            gg = JSON.parse(gg);
+            gg = JSON.stringify(gg, null, 4);
             console.log(gg);
         });
     }
@@ -166,7 +167,42 @@ document.getElementById('loadButton').addEventListener('click', function () {
 });
 
 document.getElementById('downloadButton').addEventListener('click', function () {
-    console.log("TODO");
+    getGraphJsonW.promise.then(function () {
+        let gg = getGraphJsonW();
+        gg = JSON.parse(gg);
+        gg = JSON.stringify(gg, null, 4);
+        console.log(gg);
+        const blob = new Blob([gg], { type: 'application/json' });
+
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'graph.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    });
+    // getGraphJsonW.promise.then(function {
+    //     let gg = getGraphJsonW();
+    //     gg = JSON.parse(gg);
+    //     if ("events_" in gg) {
+    //         delete gg.events_;
+    //     }
+    //     if ("pos_" in gg) {
+    //         delete gg.pos_;
+    //     }
+    //     gg = JSON.stringify(gg, null, 4);
+    //     // // Create a Blob containing the JSON data
+    //     // const blob = new Blob([gg], { type: 'application/json' });
+
+    //     // // Create a link element and trigger a download
+    //     // const downloadedJson = document.createElement('a');
+    //     // downloadedJson.href = URL.createObjectURL(blob);
+    //     // downloadedJson.download = 'graph.json';
+    //     // document.body.appendChild(downloadedJson);
+    //     // downloadedJson.click();
+    //     // document.body.removeChild(downloadedJson);
+    //     console.log(gg);
+    // });
 });
 
 document.getElementById('uploadButton').addEventListener('click', function () {
