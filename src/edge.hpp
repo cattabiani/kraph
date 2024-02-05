@@ -18,11 +18,18 @@ namespace K {
               is_from_plug_(is_from_plug), is_to_plug_(is_to_plug) {}
 
         friend std::ostream& operator<<(std::ostream& os, const Edge& obj) {
-
-            os << "Edge, id: " << obj.id_ << ", label: " << obj.label_
-               << ", from: " << obj.from_ << ", to: " << obj.to_
-               << ", is_from_plug: " << obj.is_from_plug_
-               << ", is_to_plug: " << obj.is_to_plug_;
+            using ps = std::pair<string, string>;
+            using pi = std::pair<string, int>;
+            constexpr auto sep = ", ";
+            os << '{'
+            << ps{"id_", obj.id_} << sep
+            << ps{"label_", obj.label_} << sep
+            << ps{"info_", obj.info_} << sep
+            << ps{"from_", obj.from_} << sep
+            << ps{"to_", obj.to_} << sep
+            << pi{"is_from_plug_", obj.is_from_plug_} << sep
+            << pi{"is_to_plug_", obj.is_to_plug_}
+            << '}';
             return os;
         }
 

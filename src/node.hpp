@@ -23,8 +23,16 @@ namespace K {
         unordered_set<string> edges_;
 
         friend std::ostream& operator<<(std::ostream& os, const Node& obj) {
-
-            os << "Node: " << obj.id_ << ", edges: " << obj.edges_;
+            using ps = std::pair<string, string>;
+            using pi = std::pair<string, int>;
+            constexpr auto sep = ", ";
+            os << '{' 
+               << ps{"id_", obj.id_} << sep
+               << ps{"label_", obj.label_} << sep
+               << ps{"info_", obj.info_} << sep
+               << pi{"x_", obj.x_} << sep
+               << pi{"y_", obj.y_} 
+               << '}';            
             return os;
         }
     };

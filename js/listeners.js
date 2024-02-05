@@ -117,8 +117,10 @@ document.addEventListener('keydown', async function (event) {
     }
 
     if (event.key === 'g') {
-        printGraphW.promise.then(function () {
-            printGraphW();
+        getGraphJsonW.promise.then(function () {
+            let gg = getGraphJsonW();
+            gg = JSON.stringify(JSON.parse(gg), null, 4);
+            console.log(gg);
         });
     }
 

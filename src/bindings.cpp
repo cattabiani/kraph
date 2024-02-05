@@ -141,11 +141,11 @@ fillModalWithEdgeW(const client::String& id) {
     fillModalWithEdge(std::string(id));
 }
 
-[[cheerp::jsexport]] [[cheerp::genericjs]] void printGraphW() {
+[[cheerp::jsexport]] [[cheerp::genericjs]] client::String* getGraphJsonW() {
     auto& gg = K::Graph::get_instance();
     stringstream ss;
-    ss << gg << endl;
-    client::console.log(client::String(ss.str().c_str()));
+    ss << gg;
+    return K::str2Str(ss.str());
 }
 
 [[cheerp::jsexport]] [[cheerp::genericjs]] void redoW() {

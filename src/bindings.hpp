@@ -31,7 +31,7 @@ updateNodeDataW(const client::String& id, const client::String& label,
 [[cheerp::jsexport]] [[cheerp::genericjs]] void
 updateEdgeDataW(const client::String& id, const client::String& label,
                 const client::String& info, bool is_triggered);
-[[cheerp::jsexport]] [[cheerp::genericjs]] void printGraphW();
+[[cheerp::jsexport]] [[cheerp::genericjs]] client::String* getGraphJsonW();
 [[cheerp::jsexport]] [[cheerp::genericjs]] void redoW();
 [[cheerp::jsexport]] [[cheerp::genericjs]] void undoW();
 
