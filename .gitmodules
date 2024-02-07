@@ -1,0 +1,3 @@
+[submodule "external/kjsonparser"]
+	path = external/kjsonparser
+	url = git@github.com:cattabiani/kjsonparser.git
