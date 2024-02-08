@@ -229,6 +229,7 @@ function moveNodeDivs(x, y) {
 }
 
 async function commitMoveNodes() {
+    debugLog("move nodes");
     moveNodeW.promise.then(function () {
         let l = selectionNodes.size - 1;
         let idx = 0;

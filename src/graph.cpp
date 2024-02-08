@@ -183,8 +183,10 @@ void K::Graph::move_node(K::MoveNodeEvent& e) {
 
     auto& q = it->second;
 
-    if (is_close(e.x_, q.x_, 5) || is_close(e.y_, q.y_, 5))
+    if (is_close(e.x_, q.x_, 5) && is_close(e.y_, q.y_, 5)) {
         return;
+    }
+        
     swap(e.x_, q.x_);
     swap(e.y_, q.y_);
 
