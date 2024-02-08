@@ -34,6 +34,7 @@ updateEdgeDataW(const client::String& id, const client::String& label,
 [[cheerp::jsexport]] [[cheerp::genericjs]] client::String* getGraphJsonW();
 [[cheerp::jsexport]] [[cheerp::genericjs]] void redoW();
 [[cheerp::jsexport]] [[cheerp::genericjs]] void undoW();
+[[cheerp::jsexport]] [[cheerp::genericjs]] void loadW(const client::String& s);
 
 namespace [[cheerp::genericjs]] client {
     void updateNodeJ(const String& id, const String& label, const int x,
@@ -45,6 +46,7 @@ namespace [[cheerp::genericjs]] client {
     void eraseEdgeJ(const String& id);
     void fillModalAndOpenJ(const String& id, const String& label,
                            const String& info, bool is_node);
+    void resetJ();
 }
 
 namespace [[cheerp::genericjs]] K {
@@ -61,5 +63,6 @@ namespace [[cheerp::genericjs]] K {
     void eraseEdgeJ(const string& id);
     void fillModalAndOpenJ(const string& id, const string& label,
                            const string& info, bool is_node);
+    void resetJ();
 
 }

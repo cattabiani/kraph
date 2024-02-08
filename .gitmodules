@@ -1,3 +1,6 @@
 [submodule "external/kjsonparser"]
 	path = external/kjsonparser
 	url = git@github.com:cattabiani/kjsonparser.git
+[submodule "external/cpp_utils"]
+	path = external/cpp_utils
+	url = git@github.com:cattabiani/cpp_utils.git

@@ -1,6 +1,8 @@
-#include "bindings.hpp"
-#include "graph.hpp"
+#include "../include/bindings.hpp"
+#include "../include/graph.hpp"
+#include "utils.hpp"
 
 using namespace std;
 
-void webMain() {}
+void webMain() {
+}

@@ -1,5 +1,5 @@
-#include "bindings.hpp"
-#include "graph.hpp"
+#include "../include/bindings.hpp"
+#include "../include/graph.hpp"
 
 string newNode(const int x, const int y, bool is_triggered) {
     auto& cc = K::Graph::get_instance();
@@ -158,6 +158,11 @@ fillModalWithEdgeW(const client::String& id) {
     gg.undo();
 }
 
+[[cheerp::jsexport]] [[cheerp::genericjs]] void loadW(const client::String& s) {
+    auto& gg = K::Graph::get_instance();
+    gg.load(std::string(s));
+}
+
 // void updateDataNode(const string& id, const string& label, const string&
 // info) {
 //     auto& gg = K::Graph::get_instance();
@@ -177,6 +182,9 @@ fillModalWithEdgeW(const client::String& id) {
 [[cheerp::genericjs]] void K::updateNodeJ(const string& id, const string& label,
                                           const int x, const int y) {
     client::updateNodeJ(K::str2Str(id), K::str2Str(label), x, y);
+}
+[[cheerp::genericjs]] void K::resetJ() {
+    client::resetJ();
 }
 [[cheerp::genericjs]] void K::eraseNodeJ(const string& id) {
     client::eraseNodeJ(K::str2Str(id));

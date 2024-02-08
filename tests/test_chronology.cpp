@@ -1,4 +1,3 @@
-// tests/test_hello.cpp
 #include <gtest/gtest.h>
 
 #include "../src/graph.hpp"

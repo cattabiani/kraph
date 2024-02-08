@@ -1,4 +1,4 @@
-Copyright (c) 2018 Katta <alessandro.cattabiani@gmail.com>
+Copyright (c) 2023 Alessandro Cattabiani <alessandro.cattabiani@gmail.com>
 
 Permission is hereby granted, free of charge, to any
 person obtaining a copy of this software and associated

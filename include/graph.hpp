@@ -33,21 +33,11 @@ namespace K {
         void flip_edge_plug(K::FlipEdgePlugEvent& e);
         void update_node_data(K::UpdateNodeDataEvent& e);
         void update_edge_data(K::UpdateEdgeDataEvent& e);
+        void reset();
+        void sync();
+        void load(const std::string& ss);
 
-        void clear_nodes() { nodes_.clear(); }
-        void clear_edges() { edges_.clear(); }
-        void reset_events() {
-            events_.clear();
-            pos_ = events_.end();
-        }
-        void reset_uuid() { uuid_factory_.reset(); }
 
-        void reset() {
-            clear_nodes();
-            clear_edges();
-            reset_events();
-            reset_uuid();
-        }
 
         const K::Node* get_node(const string& id) const;
         const K::Edge* get_edge(const string& id) const;
@@ -65,6 +55,7 @@ namespace K {
         void undo();
 
     private:
+        void repair();
         unordered_map<string, Node> nodes_;
         unordered_map<string, Edge> edges_;
         K::UuidFactory uuid_factory_;

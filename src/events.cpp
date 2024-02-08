@@ -1,5 +1,5 @@
-#include "events.hpp"
-#include "graph.hpp"
+#include "../include/events.hpp"
+#include "../include/graph.hpp"
 
 void K::NewNodeEvent::apply(K::Graph& gg) { gg.new_node(*this); }
 void K::EraseNodeEvent::apply(K::Graph& gg) { gg.erase_node(*this); }

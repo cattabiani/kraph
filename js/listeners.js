@@ -186,30 +186,32 @@ document.getElementById('downloadButton').addEventListener('click', function () 
         a.click();
         document.body.removeChild(a);
     });
-    // getGraphJsonW.promise.then(function {
-    //     let gg = getGraphJsonW();
-    //     gg = JSON.parse(gg);
-    //     if ("events_" in gg) {
-    //         delete gg.events_;
-    //     }
-    //     if ("pos_" in gg) {
-    //         delete gg.pos_;
-    //     }
-    //     gg = JSON.stringify(gg, null, 4);
-    //     // // Create a Blob containing the JSON data
-    //     // const blob = new Blob([gg], { type: 'application/json' });
-
-    //     // // Create a link element and trigger a download
-    //     // const downloadedJson = document.createElement('a');
-    //     // downloadedJson.href = URL.createObjectURL(blob);
-    //     // downloadedJson.download = 'graph.json';
-    //     // document.body.appendChild(downloadedJson);
-    //     // downloadedJson.click();
-    //     // document.body.removeChild(downloadedJson);
-    //     console.log(gg);
-    // });
 });
 
 document.getElementById('uploadButton').addEventListener('click', function () {
-    console.log("TODO");
+    // Trigger file input click
+    let v = document.getElementById('uploadInput');
+    v.click();
+    v.value = null;
+});
+
+document.getElementById('uploadInput').addEventListener('change', async function () {
+    // Check if a file is selected
+    if (this.files && this.files[0]) {
+        var file = this.files[0];
+        debugLog("Selected file" + file);
+        // Check if the selected file is a JSON file
+        if (file.type === 'application/json') {
+            reader = new FileReader();
+            reader.onload = async function (e) {
+                var content = e.target.result;
+                loadW.promise.then(function () {
+                    loadW(content);
+                });
+            };
+            await reader.readAsText(file);
+        } else {
+            console.error("Please select a JSON file.");
+        }
+    }
 });

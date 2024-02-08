@@ -2,8 +2,8 @@
 
 #include <string>
 #include <unordered_set>
-
 #include "utils.hpp"
+#include "kjsonparser.hpp"
 
 using namespace std;
 
@@ -14,6 +14,21 @@ namespace K {
         Node(const string& id, const string& label, const string& info,
              const int x, const int y)
             : id_(id), label_(label), info_(info), x_(x), y_(y) {}
+        Node(const K::KJsonParser::dict_type& d) {
+            for (const auto& [key, value] : d) {
+                if (key == "id_") {
+                    id_ = get<string>(*value);
+                } else if (key == "label_") {
+                    label_ = get<string>(*value);
+                } else if (key == "info_") {
+                    info_ = get<string>(*value);
+                } else if (key == "x_") {
+                    x_ = get<int>(*value);
+                } else if (key == "y_") {
+                    y_ = get<int>(*value);
+                }
+            }
+        }
 
         string id_ = "";
         string label_ = "New Node";

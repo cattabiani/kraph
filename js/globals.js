@@ -9,3 +9,18 @@ let fakeEdgeFromId = null;
 let connectedEdges = [];
 let isEditDataForNode = null;
 let modalSourceId = null;
+let reader = null;
+
+function resetGlobals() {
+    selectionNodes.clear();
+    selectionEdges.clear();
+    selectionBox = null;
+    startX = null;
+    startY = null;
+    isDragging = false;
+    fakeEdgeFromId = null;
+    connectedEdges = [];
+    isEditDataForNode = null;
+    modalSourceId = null;
+    reader = null;
+}

@@ -334,4 +334,14 @@ async function openModal(elem) {
 
 }
 
+function resetJ() {
+    resetGlobals();
+
+    var elements = document.querySelectorAll('[id^="uuid_"]');
+    elements.forEach(function(element) {
+        element.parentNode.removeChild(element);
+    });
+}
+
+
 

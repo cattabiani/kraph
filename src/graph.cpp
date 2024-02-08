@@ -1,9 +1,9 @@
-#include "graph.hpp"
-
+#include "../include/graph.hpp"
+#include "kjsonparser.hpp"
 #include <iostream>
 
 #ifndef TESTS
-#include "bindings.hpp"
+#include "../include/bindings.hpp"
 #endif
 
 #ifndef TESTS
@@ -183,7 +183,7 @@ void K::Graph::move_node(K::MoveNodeEvent& e) {
 
     auto& q = it->second;
 
-    if (K::Utils::is_close(e.x_, q.x_, 5) || K::Utils::is_close(e.y_, q.y_, 5))
+    if (is_close(e.x_, q.x_, 5) || is_close(e.y_, q.y_, 5))
         return;
     swap(e.x_, q.x_);
     swap(e.y_, q.y_);
@@ -197,6 +197,69 @@ void K::Graph::move_node(K::MoveNodeEvent& e) {
     auto p = make_shared<K::MoveNodeEvent>(e);
     events_.insert(pos_, p);
 }
+
+void K::Graph::load(const std::string& s) {
+    using dict_type = K::KJsonParser::dict_type;
+    const auto parsedData = K::KJsonParser::parse(s);
+    const auto& d = get<dict_type>(parsedData);
+    reset();
+
+    const auto& nodesDict = get<dict_type>(*d.at("nodes_"));
+    for (const auto& [key, value] : nodesDict) {
+        nodes_.emplace(key, get<dict_type>(*value));
+    }
+
+    const auto& edgesDict = get<dict_type>(*d.at("edges_"));
+    for (const auto& [key, value] : edgesDict) {
+        edges_.emplace(key, get<dict_type>(*value));
+    }
+
+    repair();
+
+    sync();
+}
+
+void K::Graph::repair() {
+    for (auto& [key, n] : nodes_) {
+        n.edges_.clear();
+        uuid_factory_.repair(n.id_);
+    }
+    for (const auto& [key, e] : edges_) {
+        nodes_[e.from_].edges_.insert(e.id_);
+        nodes_[e.to_].edges_.insert(e.id_);
+        uuid_factory_.repair(e.id_);
+    }
+}
+
+
+void K::Graph::reset() {
+    nodes_.clear();
+    edges_.clear();
+    events_.clear();
+    pos_ = events_.end();
+    uuid_factory_.reset();
+    
+
+#ifndef TESTS
+    // emit js
+    K::resetJ();
+#endif
+}
+
+void K::Graph::sync() {
+#ifndef TESTS
+    // emit js
+    K::resetJ();
+    for (const auto& [k, q] : nodes_) {
+        K::updateNodeJ(q.id_, q.label_, q.x_, q.y_);
+    }
+    for (const auto& [k, q] : edges_) {
+        K::updateEdgeJ(q.id_, q.label_, q.from_, q.to_, q.is_from_plug_,
+                   q.is_to_plug_);
+    }
+#endif
+}
+
 
 void K::Graph::flip_edge_plug(K::FlipEdgePlugEvent& e) {
     auto it = edges_.find(e.id_);
