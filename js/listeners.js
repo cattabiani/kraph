@@ -169,6 +169,7 @@ document.getElementById('loadButton').addEventListener('click', function () {
 document.getElementById('downloadButton').addEventListener('click', function () {
     getGraphJsonW.promise.then(function () {
         let gg = getGraphJsonW();
+        debugLog(gg);
         gg = JSON.parse(gg);
         if ("events_" in gg) {
             delete gg.events_;
