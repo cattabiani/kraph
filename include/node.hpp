@@ -20,6 +20,7 @@ namespace K {
         , x_(get<int>(*d.at("x_")))
         , y_(get<int>(*d.at("y_")))
         {
+            
         }
 
         string id_ = "";
