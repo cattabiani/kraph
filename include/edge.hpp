@@ -16,24 +16,13 @@ namespace K {
              bool is_to_plug)
             : id_(id), label_(label), info_(info), from_(from), to_(to),
               is_from_plug_(is_from_plug), is_to_plug_(is_to_plug) {}
-        Edge(const K::KJsonParser::dict_type& d) {
-            for (const auto& [key, value] : d) {
-                if (key == "id_") {
-                    id_ = get<string>(*value);
-                } else if (key == "label_") {
-                    label_ = get<string>(*value);
-                } else if (key == "info_") {
-                    info_ = get<string>(*value);
-                } else if (key == "from_") {
-                    from_ = get<string>(*value);
-                } else if (key == "to_") {
-                    to_ = get<string>(*value);
-                } else if (key == "is_from_plug_") {
-                    is_from_plug_ = get<int>(*value);
-                } else if (key == "is_to_plug_") {
-                    is_to_plug_ = get<int>(*value);
-                }
-            }
+        Edge(const K::KJsonParser::dict_type& d) : id_(get<string>(*d.at("id_")))
+        , label_(get<string>(*d.at("label_"))), info_(get<string>(*d.at("info_"))) 
+        , from_(get<string>(*d.at("from_")))
+        , to_(get<string>(*d.at("to_")))
+        , is_from_plug_(get<int>(*d.at("is_from_plug_")))
+        , is_to_plug_(get<int>(*d.at("is_to_plug_")))
+         {
         }
 
         friend std::ostream& operator<<(std::ostream& os, const Edge& obj) {
