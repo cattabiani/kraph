@@ -15,12 +15,13 @@ namespace K {
              const int x, const int y)
             : id_(id), label_(label), info_(info), x_(x), y_(y) {}
         Node(const K::KJsonParser::dict_type& d) :
-        id_(get<string>(*d.at("id_")))
-        , label_(get<string>(*d.at("label_"))), info_(get<string>(*d.at("info_"))) 
+        id_(get<string>(*d.at("id_")))              , label_(get<string>(*d.at("label_"))), info_(get<string>(*d.at("info_"))) 
+        
         , x_(get<int>(*d.at("x_")))
+        
         , y_(get<int>(*d.at("y_")))
-        {
 
+        {
         }
 
         string id_ = "";
