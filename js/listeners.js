@@ -158,14 +158,6 @@ document.getElementById('infoButton').addEventListener('click', function () {
     document.getElementById('infoMenu').style.display = 'block';
 });
 
-document.getElementById('saveButton').addEventListener('click', function () {
-    console.log("TODO");
-});
-
-document.getElementById('loadButton').addEventListener('click', function () {
-    console.log("TODO");
-});
-
 document.getElementById('downloadButton').addEventListener('click', function () {
     getGraphJsonW.promise.then(function () {
         let gg = getGraphJsonW();
